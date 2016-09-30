@@ -13,9 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($name)) {
         echo "Name is empty";
     } else {
-        echo $name;
+
         $name = str_replace(" ", "", $name);
-        echo $name;
+        echo $name + 1;
+        $multPos = strpos($name, "*");
     }
 }
 ?>
