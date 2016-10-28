@@ -13,8 +13,8 @@
 
       Director<INPUT TYPE="radio" name="actor_director" VALUE="1" CHECKED>
       <br>
-      Actor<INPUT TYPE="radio" name="actor_director" VALUE="2" CHECKED>
-      <br>ß
+      Actor<INPUT TYPE="radio" name="actor_director" VALUE="2">
+      <br>
       First Name
       <br>
       <INPUT TYPE="text" name="firstName">
