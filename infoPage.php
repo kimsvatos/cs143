@@ -9,7 +9,7 @@
 
 		<br>
 		<form method="post" action="test.php">
-       		 <input type="Submit" name="Insert a New Actor/Director">
+       		 <input type="Submit" value="Insert a New Actor/Director">
     	</form>
 	</body>
 
