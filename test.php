@@ -42,7 +42,7 @@
 
 
     <?php
-      if ($_SERVER['REQUEST_METHOD'] == "GET"){
+      if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $quitError=0;
       # Retrieve the query the user wants to run
         if (!($firstName = $_GET['firstName'])) {
