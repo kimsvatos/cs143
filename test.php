@@ -74,7 +74,7 @@
           $actorStatement->bind_param("isssss", $t_id, $t_last, $t_first, $t_sex, $t_dob, $t_dod);
           echo "binded dates <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
-          $actorStatemet->execute();
+          $actorStatement->execute();
           echo "submitted!";
         }
       }
