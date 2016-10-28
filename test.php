@@ -55,6 +55,9 @@
           echo "Need a date of birth!<br>";
           $quitError=1;
         }
+        $sex = $_GET['gender'];
+        $dod = $_GET['DOD'];
+
         if(!$quitError){
           #where we would want to INSERT
           $database = new mysqli('localhost', 'cs143', '', 'CS143');
@@ -65,12 +68,12 @@
           echo "about to make statement <br>";
           $actorStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
           echo "about to bind param <br>";
-          $t_id = 80000;
-          $t_last = "haacker";
-          $t_first = "kyle";
-          $t_sex = "Male";
-          $t_dob = "1000-10-10";
-          $t_dod = "1900-10-10";
+          $t_id = 81000;
+          $t_last = $lastName;
+          $t_first =  $firstName;
+          $t_sex = $sex;
+          $t_dob = $dob;
+          $t_dod = $dob;
           $actorStatement->bind_param("isssss", $t_id, $t_last, $t_first, $t_sex, $t_dob, $t_dod);
           echo "binded dates <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
