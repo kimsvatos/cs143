@@ -10,10 +10,10 @@
     
 
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
+      <h2>Submit a New Person!</h2>
+      Actor  <INPUT TYPE="radio" name="actor_director" VALUE="1" CHECKED>
 
-      Director<INPUT TYPE="radio" name="actor_director" VALUE="1" CHECKED>
-      <br>
-      Actor<INPUT TYPE="radio" name="actor_director" VALUE="2">
+      Director<INPUT TYPE="radio" name="actor_director" VALUE="2">
       <br>
       First Name
       <br>
@@ -23,6 +23,9 @@
       <br>
       <input type="text" name="lastName">
 
+      Male <INPUT TYPE="radio" name="gender" VALUE="1" CHECKED>
+
+      Better<INPUT TYPE="radio" name="gender" VALUE="2">
       <br><br>
       Date of Birth
       <br>
