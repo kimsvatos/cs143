@@ -10,16 +10,31 @@
     
 
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
+
+      Director<INPUT TYPE="radio" name="actor_director" VALUE="1" CHECKED>
+      <br>
+      Actor<INPUT TYPE="radio" name="actor_director" VALUE="2" CHECKED>
+      <br>ß
       First Name
       <br>
       <INPUT TYPE="text" name="firstName">
-
       <br><br>
       Last Name
       <br>
       <input type="text" name="lastName">
 
+      <br><br>
+      Date of Birth
+      <br>
+      <input type="text" name="DOB">
+     
+
+      <br><br>
+      Date of Death?
+      <br>
+      <input type="text" name="DOD">
       <input type="submit" value="Submit">
+
     </form> <br>
 
 
