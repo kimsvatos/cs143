@@ -12,7 +12,11 @@
 		Kyle + Kim
 		<form method="post" action="test.php">
        		 <input type="Submit" value="Insert a New Actor/Director">
-    	</form></marquee>
+    	</form>
+    	<form method="post" action="movieInfo.php">
+       		 <input type="Submit" value="Insert a New Actor/Director">
+    	</form>
+    </marquee>
 	</body>
 
 </html>
