@@ -65,7 +65,7 @@
           echo "about to make statement <br>";
           $actorStatement = $database->prepare("INSERT INTO Actor VALUES (?, ?, ?, ?, ?, ? )");
           echo "about to bind param <br>";
-          $actorStatement->bind_param('isssss', 900000000, $lastName, $firstName, "Male", $DOB, ""); 
+          $actorStatement->bind_param('isssss', 90000, $lastName, $firstName, "Male", $DOB, ""); 
           echo "binded param <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
           $database->query($actorStatement);
