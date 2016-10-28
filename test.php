@@ -83,7 +83,7 @@
           $statement->execute();
           echo "updated id";
 
-          $t_id = 81000;
+          $t_id = $id;
           $t_last = $lastName;
           $t_first =  $firstName;
           $t_sex = $sex;
