@@ -22,7 +22,7 @@
       Last Name
       <br>
       <input type="text" name="lastName">
-
+      <br>
       Male <INPUT TYPE="radio" name="gender" VALUE="1" CHECKED>
 
       Better<INPUT TYPE="radio" name="gender" VALUE="2">
