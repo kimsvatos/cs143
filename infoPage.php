@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title> I hate my job </title>
+		<title> CS143 Lab 1C </title>
 	</head>
 	<body>
 		<marquee>
@@ -14,7 +14,7 @@
        		 <input type="Submit" value="Insert a New Actor/Director">
     	</form>
     	<form method="post" action="movieInfo.php">
-       		 <input type="Submit" value="see sum info">
+       		 <input type="Submit" value="see sum infoz">
     	</form>
     </marquee>
 	</body>
