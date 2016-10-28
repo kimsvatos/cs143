@@ -18,8 +18,15 @@
       <input type="text" name="year">
       <br>
 
-      rating: scroll bar
-
+      Rating:<SELECT NAME="Rating">
+      <OPTION> G
+      <OPTION> PG
+      <OPTION> PG-13
+      <OPTION> R
+      <OPTION> NC-17
+      <OPTION> surrendere
+      </SELECT>
+      
       <br>
       Action<input type="checkbox" name="action" value="ON">
  	  Adult<input type="checkbox" name="adult" value="ON">
