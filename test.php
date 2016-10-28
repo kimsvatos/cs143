@@ -76,11 +76,11 @@
           $occupation = $_GET['actor_director'];
           if($occupation == "Director"){
             $personStatement = $database->prepare("INSERT INTO Director (id, last, first, dob, dod) VALUES (?, ?, ?, ?, ?);");
-            $personStatement->bind_param("issss", $id, $last, $first, $dob, $dod);
+            $personStatement->bind_param("issss", $id, $lastName, $firstName, $dob, $dod);
           }
           else{
             $personStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
-            $personStatement->bind_param("isssss", $id, $last, $first, $sex, $dob, $dod);
+            $personStatement->bind_param("isssss", $id, $lastName, $firstName, $sex, $dob, $dod);
           }
          
           $personStatement->execute();
