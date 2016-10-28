@@ -62,8 +62,11 @@
             die('Unable to connect to database [' . $database->connect_error . ']');
           }
           //make sure to do query to get max person ID and then increment that too
+          echo "about to make statement <br>";
           $actorStatement = $database->prepare("INSERT INTO Actor VALUES (?, ?, ?, ?, ?, ? )");
+          echo "about to bind param <br>";
           $actorStatement->bind_param('isssss', 900000000, $lastName, $firstName, "Male", $DOB, ""); 
+          echo "binded param <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
           $database->query($actorStatement);
           echo "submitted!";
