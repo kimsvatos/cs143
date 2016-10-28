@@ -21,9 +21,9 @@
       <br>
       <input type="text" name="lastName">
       <br>
-      Male <INPUT TYPE="radio" name="gender" VALUE="1" CHECKED>
+      Male <INPUT TYPE="radio" name="gender" VALUE="Male" CHECKED>
 
-      Better<INPUT TYPE="radio" name="gender" VALUE="2">
+      Better<INPUT TYPE="radio" name="gender" VALUE="Female">
       <br><br>
       Date of Birth
       <br>
@@ -73,7 +73,7 @@
           $t_first =  $firstName;
           $t_sex = $sex;
           $t_dob = $dob;
-          $t_dod = $dob;
+          $t_dod = $dod;
           $actorStatement->bind_param("isssss", $t_id, $t_last, $t_first, $t_sex, $t_dob, $t_dod);
           echo "binded dates <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
