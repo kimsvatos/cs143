@@ -76,7 +76,12 @@
           $id_query = "SELECT * FROM MaxPersonID;";
           $MaxPersonID = $database->query($id_query);
           $result = $MaxPersonID->fetch_array(MYSQLI_NUM);
-          echo $result[0];
+          $id = $result[0] + 1;
+
+          //insert id value back into table
+          $statement = $database->prepare("UPDATE MaxPersonID SET id = $id;");
+          $statement->execute();
+          echo "updated id";
 
           $t_id = 81000;
           $t_last = $lastName;
