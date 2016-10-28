@@ -28,7 +28,7 @@
       </SELECT>
 
       <br>
-      <marquee speed=3>Action<input type="checkbox" name="action" value="ON"></marquee>
+      <marquee speed=10>Action<input type="checkbox" name="action" value="ON"></marquee>
  	  Adult<input type="checkbox" name="adult" value="ON">
       Adventure<input type="checkbox" name="adventure" value="ON">
  	  Animation<input type="checkbox" name="animation" value="ON">
@@ -37,7 +37,7 @@
       Documentary<input type="checkbox" name="documentary" value="ON">
  	  Drama<input type="checkbox" name="drama" value="ON">
  	  Family<input type="checkbox" name="family" value="ON"><br>
- 	  <marquee speed=5>Fantasy<input type="checkbox" name="fantasy" value="ON">
+ 	  <marquee speed=20>Fantasy<input type="checkbox" name="fantasy" value="ON">
       Horror<input type="checkbox" name="horror" value="ON">
  	  Musical<input type="checkbox" name="musical" value="ON"></marquee>
  	  Mystery<input type="checkbox" name="mystery" value="ON"><br>
