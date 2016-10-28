@@ -75,7 +75,8 @@
           ///get most recent id, assign it to $id, then update the highest ID
           $id_query = "SELECT * FROM MaxPersonID;";
           $MaxPersonID = $database->query($id_query);
-          //echo "$MaxPersonID";
+          $result = $MaxPersonID->fetch_array(MYSQLI_NUM);
+          echo $result[0];
 
           $t_id = 81000;
           $t_last = $lastName;
