@@ -68,7 +68,7 @@
           $actorStatement->bind_param('isssss', 90000, $lastName, $firstName, "Male", $DOB, ""); 
           echo "binded param <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
-          $database->query($actorStatement);
+          $statement->execute();
           echo "submitted!";
         }
       }
