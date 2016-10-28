@@ -63,10 +63,10 @@
           }
           //make sure to do query to get max person ID and then increment that too
           $actorStatement = $database->prepare("INSERT INTO Actor VALUES (?, ?, ?, ?, ?, ? )");
-          $actorStatement->bind_param('isssss', 900000000, $lastName, $firstName, "Male", $DOB, "DOD"); 
-
+          $actorStatement->bind_param('isssss', 900000000, $lastName, $firstName, "Male", $DOB, ""); 
+          //seems to insert, cant find when query tho so lets fix that bug 
           $database->query($actorStatement);
-          
+          echo "submitted!"
         }
       }
     ?>
