@@ -42,19 +42,21 @@
 
 
     <?php
-      $quitError=0;
+      if ($_SERVER['REQUEST_METHOD'] == "GET"){
+        $quitError=0;
       # Retrieve the query the user wants to run
-      if (!($firstName = $_GET['firstName'])) {
-        echo "Need a first name!<br>";
-        $quitError=1;
+        if (!($firstName = $_GET['firstName'])) {
+          echo "Need a first name!<br>";
+          $quitError=1;
+        }
+        if (!($lastName = $_GET['lastName'])) {
+          echo "Need a last name!<br>";
+          $quitError=1;
+        }
+        if (!($dob = $_GET['DOB'])) {
+          echo "Need a date of birth!<br>";
+          $quitError=1;
       }
-      if (!($lastName = $_GET['lastName'])) {
-        echo "Need a last name!<br>";
-        $quitError=1;
-      }
-      if (!($dob = $_GET['DOB'])) {
-        echo "Need a date of birth!<br>";
-        $quitError=1;
       }
     ?>
 
