@@ -56,7 +56,8 @@
           $quitError=1;
         }
         $sex = $_GET['gender'];
-        if(!($dod = $_GET['DOD']){
+
+        if(!($dod = $_GET['DOD'])){
           $dod = "N/A";
         }
 
