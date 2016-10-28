@@ -14,7 +14,7 @@
        		 <input type="Submit" value="Insert a New Actor/Director">
     	</form>
     	<form method="post" action="movieInfo.php">
-       		 <input type="Submit" value="Insert a New Actor/Director">
+       		 <input type="Submit" value="see sum info">
     	</form>
     </marquee>
 	</body>
