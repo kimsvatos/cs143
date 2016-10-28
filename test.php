@@ -63,23 +63,15 @@
           }
           //make sure to do query to get max person ID and then increment that too
           echo "about to make statement <br>";
-          $actorStatement = $database->prepare("INSERT INTO Actor VALUES (:id, :lastname, :firstname, :gender, :dob, :dod )");
+          $actorStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?)");
           echo "about to bind param <br>";
-          $actorStatement->bind_param(':lastname', $lastName);
-          echo "bound lastname<br>";
-          $id = 90000;
-          $actorStatement->bind_param(':id', $id);
-          echo "binded ID <br>";
-          //$actorStatement->bind_param(':lastname', $lastName);
-          $actorStatement->bind_param(':firstname', $firstName);
-          echo "binded names<br>";
-          $sex = "Male";
-          $actorStatement->bind_param(':gender', $sex);
-          echo "binded gender <br>";
-          $dob= "1900-10=10";
-          $actorStatement->bind_param(':dob', $dob);
-          $dod = "";
-          $actorStatement->bind_param(':dod', $dod);
+          $t_id = 80000;
+          $t_last = "haacker";
+          $t_first = "kyle";
+          $t_sex = "Male";
+          $t_dob = "1000-10-10";
+          $t_dod = "1900-10-10";
+          $actorStatement->bind_param("isssss", $t_id, $t_last, $t_first, $t_sex, $t_dob, $t_dod);
           echo "binded dates <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
           $statement->execute();
