@@ -9,9 +9,9 @@
 
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
       <h2>Submit a New Person!</h2>
-      Actor  <INPUT TYPE="radio" name="actor_director" VALUE="1" CHECKED>
+      Actor  <INPUT TYPE="radio" name="actor_director" VALUE="Actor" CHECKED>
 
-      Director<INPUT TYPE="radio" name="actor_director" VALUE="2">
+      Director<INPUT TYPE="radio" name="actor_director" VALUE="Director">
       <br>
       First Name
       <br>
@@ -68,31 +68,29 @@
             die('Unable to connect to database [' . $database->connect_error . ']');
           }
           //make sure to do query to get max person ID and then increment that too
-          echo "about to make statement <br>";
-          $actorStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
-          echo "about to bind param <br>";
-
-          ///get most recent id, assign it to $id, then update the highest ID
           $id_query = "SELECT * FROM MaxPersonID;";
           $MaxPersonID = $database->query($id_query);
           $result = $MaxPersonID->fetch_array(MYSQLI_NUM);
           $id = $result[0] + 1;
 
-          //insert id value back into table
-          $statement = $database->prepare("UPDATE MaxPersonID SET id = $id;");
-          $statement->execute();
-          echo "updated id";
+          $occupation = $_GET['actor_director'];
+          if($occupation == "Director"){
+            $personStatement = $database->prepare("INSERT INTO Director (id, last, first, dob, dod) VALUES (?, ?, ?, ?, ?);");
+            $personStatement->bind_param("issss", $id, $last, $first, $dob, $dod);
+          }
+          else{
+            $personStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
+            $personStatement->bind_param("isssss", $id, $last, $first, $sex, $dob, $dod);
+          }
+         
+          $personStatement->execute();
+          //TODO: make sure INSERT succeeded before updating this value
 
-          $t_id = $id;
-          $t_last = $lastName;
-          $t_first =  $firstName;
-          $t_sex = $sex;
-          $t_dob = $dob;
-          $t_dod = $dod;
-          $actorStatement->bind_param("isssss", $t_id, $t_last, $t_first, $t_sex, $t_dob, $t_dod);
-          echo "binded dates <br>";
+          $id_statement = $database->prepare("UPDATE MaxPersonID SET id = $id;");
+          $id_statement->execute();
+   
           //seems to insert, cant find when query tho so lets fix that bug 
-          $actorStatement->execute();
+         
           echo "submitted!";
         }
       }
