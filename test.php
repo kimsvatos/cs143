@@ -57,7 +57,7 @@
         }
         $sex = $_GET['gender'];
         $dod = $_GET['DOD'];
-        if(($dod == "0000-00-00") || $dod == ""){
+        if($dod == ""){
           $dod = NULL;
         }
 
@@ -71,6 +71,12 @@
           echo "about to make statement <br>";
           $actorStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
           echo "about to bind param <br>";
+
+          ///get most recent id, assign it to $id, then update the highest ID
+          $id_query = "SELECT * FROM MaxPersonID;"
+          $MaxPersonID = $database->query($id_query);
+          echo "$MaxPersonID";
+
           $t_id = 81000;
           $t_last = $lastName;
           $t_first =  $firstName;
