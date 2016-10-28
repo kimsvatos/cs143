@@ -58,7 +58,7 @@
         $sex = $_GET['gender'];
         $dod = $_GET['DOD']
         if(($dod == "0000-00-00")){
-          $dod = "N/A";
+          $dod = null;
         }
 
         if(!$quitError){
