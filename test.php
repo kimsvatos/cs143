@@ -38,13 +38,14 @@
 
 
     </form> <br>
+ <!-- LINK TO PAGE HERE--> 
     <form method="post" action="infoPage.php">
       <input type = "submit">
 
     <?php
       if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $quitError=0;
-      # Retrieve the query the user wants to run
+      # CHECK that we have valid input
         if (!($firstName = $_GET['firstName'])) {
           echo "Need a first name!<br>";
           $quitError=1;
@@ -75,11 +76,13 @@
           $result = $MaxPersonID->fetch_array(MYSQLI_NUM);
           $id = $result[0] + 1;
 
+          #director query
           $occupation = $_GET['actor_director'];
           if($occupation == "Director"){
             $personStatement = $database->prepare("INSERT INTO Director (id, last, first, dob, dod) VALUES (?, ?, ?, ?, ?);");
             $personStatement->bind_param("issss", $id, $lastName, $firstName, $dob, $dod);
           }
+          #actor query
           else{
             $personStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
             $personStatement->bind_param("isssss", $id, $lastName, $firstName, $sex, $dob, $dod);
@@ -90,8 +93,7 @@
 
           $id_statement = $database->prepare("UPDATE MaxPersonID SET id = $id;");
           $id_statement->execute();
-   
-          //seems to insert, cant find when query tho so lets fix that bug 
+
          
           echo "submitted!";
         }
