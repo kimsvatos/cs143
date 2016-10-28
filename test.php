@@ -67,15 +67,19 @@
           echo "about to bind param <br>";
           $actorStatement->bind_param(':lastname', $lastName);
           echo "bound lastname<br>";
-          $actorStatement->bind_param(':id', 90000);
+          $id = 90000;
+          $actorStatement->bind_param(':id', $id);
           echo "binded ID <br>";
           //$actorStatement->bind_param(':lastname', $lastName);
           $actorStatement->bind_param(':firstname', $firstName);
           echo "binded names<br>";
-          $actorStatement->bind_param(':gender', "Male");
+          $sex = "Male";
+          $actorStatement->bind_param(':gender', $sex);
           echo "binded gender <br>";
-          $actorStatement->bind_param(':dob', "1990-10-10");
-          $actorStatement->bind_param(':dod', "1995-10-10");
+          $dob= "1900-10=10";
+          $actorStatement->bind_param(':dob', $dob);
+          $dod = "";
+          $actorStatement->bind_param(':dod', $dod);
           echo "binded dates <br>";
           //seems to insert, cant find when query tho so lets fix that bug 
           $statement->execute();
