@@ -65,9 +65,11 @@
           echo "about to make statement <br>";
           $actorStatement = $database->prepare("INSERT INTO Actor VALUES (:id, :lastname, :firstname, :gender, :dob, :dod )");
           echo "about to bind param <br>";
+          $actorStatement->bind_param(':lastname', $lastName);
+          echo "bound lastname<br>";
           $actorStatement->bind_param(':id', 90000);
           echo "binded ID <br>";
-          $actorStatement->bind_param(':lastname', $lastName);
+          //$actorStatement->bind_param(':lastname', $lastName);
           $actorStatement->bind_param(':firstname', $firstName);
           echo "binded names<br>";
           $actorStatement->bind_param(':gender', "Male");
