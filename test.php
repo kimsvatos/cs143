@@ -36,8 +36,10 @@
       <input type="text" name="DOD">
       <input type="submit" value="Submit">
 
-    </form> <br>
 
+    </form> <br>
+    <form method="post" action="infoPage.php">
+      <input type = "submit">
 
     <?php
       if ($_SERVER["REQUEST_METHOD"] == "GET"){
