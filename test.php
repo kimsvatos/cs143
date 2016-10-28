@@ -7,8 +7,6 @@
   <body>
     <h1></h1>
 
-    
-
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
       <h2>Submit a New Person!</h2>
       Actor  <INPUT TYPE="radio" name="actor_director" VALUE="1" CHECKED>
@@ -56,7 +54,20 @@
         if (!($dob = $_GET['DOB'])) {
           echo "Need a date of birth!<br>";
           $quitError=1;
-      }
+        }
+        if(!$quitError){
+          #where we would want to INSERT
+          $database = new mysqli('localhost', 'cs143', '', 'CS143');
+          if($database->connect_errno > 0){
+            die('Unable to connect to database [' . $database->connect_error . ']');
+          }
+          //make sure to do query to get max person ID and then increment that too
+          $actorStatement = $database->prepare("INSERT INTO Actor VALUES (?, ?, ?, ?, ?, ? )");
+          $actorStatement->bind_param('isssss', 900000000, $lastName, $firstName, "Male", $DOB, "DOD"); 
+
+          $database->query($actorStatement);
+          
+        }
       }
     ?>
 
