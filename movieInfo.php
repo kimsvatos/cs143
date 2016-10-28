@@ -1,6 +1,6 @@
 <html>
 <title>i hate kyle</title>
-	<h1> Add Movie Information</h1>
+	<h1 color="blue"> Add Movie Information</h1>
 	<body>
 	  <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
      
@@ -26,7 +26,7 @@
       <OPTION> NC-17
       <OPTION> surrendere
       </SELECT>
-      
+
       <br>
       Action<input type="checkbox" name="action" value="ON">
  	  Adult<input type="checkbox" name="adult" value="ON">
