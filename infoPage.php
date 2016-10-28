@@ -7,10 +7,10 @@
 		Welcome to Kim + Kyles endless adventure website of movies and actors!!!<br>
 		Plz click any link below to navigate to some rad places, dude!
 
-		<br>
+		<br><marquee>
 		<form method="post" action="test.php">
        		 <input type="Submit" value="Insert a New Actor/Director">
-    	</form>
+    	</form></marquee>
 	</body>
 
 </html>
