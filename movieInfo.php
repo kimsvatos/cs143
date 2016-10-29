@@ -86,6 +86,7 @@
         	$genre = "Action";
          	$genreStatement->bind_param("is", $id, $genre);
          	$genreStatement->execute();
+         	$database->commit();
          	echo "success!<br>";
           }
           if(($genre =$_GET['adult']) == "ON"){
