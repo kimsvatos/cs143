@@ -19,7 +19,7 @@
       <br>
 
       Rating:<SELECT NAME="Rating">
-      <OPTION> G
+      <OPTION SELECTED> G
       <OPTION> PG
       <OPTION> PG-13
       <OPTION> R
@@ -53,6 +53,7 @@
    <?php
    		if ($_SERVER["REQUEST_METHOD"] == "GET"){
         $quitError=0;
+
       # CHECK that we have valid input
         if (!($movieTitle = $_GET['title'])) {
           echo "Need a movie title!<br>";
@@ -63,13 +64,6 @@
           $quitError=1;
         }
        
-        $year = $_GET['year'];
-        $horror = $_GET['horror'];
-        $drama = $_GET['drama'];
-
-        echo "$drama<br>";
-        echo "$horror";
-
 
 
         if(!$quitError){
@@ -79,27 +73,82 @@
             die('Unable to connect to database [' . $database->connect_error . ']');
           }
           //make sure to do query to get max person ID and then increment that too
-          $id_query = "SELECT * FROM MaxPersonID;";
-          $MaxPersonID = $database->query($id_query);
-          $result = $MaxPersonID->fetch_array(MYSQLI_NUM);
+          $id_query = "SELECT * FROM MaxMovieID;";
+          $MaxMovieID = $database->query($id_query);
+          $result = $MaxMovieID->fetch_array(MYSQLI_NUM);
           $id = $result[0] + 1;
+          $year = $_GET['year'];
+     	  $rating = $_GET['rating'];
 
-          #director query
-          $occupation = $_GET['actor_director'];
-          if($occupation == "Director"){
-            $personStatement = $database->prepare("INSERT INTO Director (id, last, first, dob, dod) VALUES (?, ?, ?, ?, ?);");
-            $personStatement->bind_param("issss", $id, $lastName, $firstName, $dob, $dod);
+          if($action = $_GET['action']){
+        	//insert
           }
-          #actor query
-          else{
-            $personStatement = $database->prepare("INSERT INTO Actor (id, last, first, sex, dob, dod) VALUES (?, ?, ?, ?, ?, ?);");
-            $personStatement->bind_param("isssss", $id, $lastName, $firstName, $sex, $dob, $dod);
+          if($adult = $_GET['adult']){
+        	//insert
           }
-         
-          $personStatement->execute();
+          if($adventure = $_GET['adventure']){
+        	//insert
+          }
+          if($animation = $_GET['animation']){
+        	//inser
+          }
+          if($comedy = $_GET['comedy']){
+        	//insert
+          }
+          if($crime = $_GET['crime']){
+        	//insert
+          }
+          if($documentary = $_GET['documentary']){
+        	//insert
+          }
+          if($drama= $_GET['drama']){
+        	//insert
+          }
+          if($family = $_GET['family']){
+        	//insert
+          }
+          if($fantasy = $_GET['fantasy']){
+        	//insert
+          }
+          if($horror = $_GET['horror']){
+        	//insert
+          }
+          if($musical = $_GET['musical']){
+        	//insert
+          }
+          if($mystery = $_GET['mystery']){
+        	//insert
+          }
+          if($romance= $_GET['romance']){
+        	//insert
+          }
+          if($scifi = $_GET['scifi']){
+        	//insert
+          }
+          if($short = $_GET['short']){
+        	//insert
+          }
+          if($thriller = $_GET['thriller']){
+        	//insert
+          }
+          if($war = $_GET['war']){
+        	//insert
+          }
+          if($western = $_GET['western']){
+        	//insert
+          }
+
+
+
+
+          #movie
+       
+          $movieStatement = $database->prepare("INSERT INTO Movie (id, title, year, rating, company) VALUES (?, ?, ?, ?, ?);");
+          $movieStatement->bind_param("isiss", $id, $movieTitle, $year, $rating, $movieCo);
+          $movieStatement->execute();
           //TODO: make sure INSERT succeeded before updating this value
 
-          $id_statement = $database->prepare("UPDATE MaxPersonID SET id = $id;");
+          $id_statement = $database->prepare("UPDATE MaxMovieID SET id = $id;");
           $id_statement->execute();
 
          
