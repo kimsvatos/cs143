@@ -89,6 +89,7 @@
           if(($genre =$_GET['adult']) == "ON"){
         	$genreArr[$k]='Adult';
           	$k++;
+          	echo "$genreArr[$k - 1] <br>";
           }
           if($adventure = $_GET['adventure']){
         	//insert
