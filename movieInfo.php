@@ -92,6 +92,7 @@
           if(($genre =$_GET['adult']) == "ON"){
         	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
          	$genreStatement->bind_param("is", $id, $genre);
+         	echo "$genreStatement<br>";
          	$genreStatement->execute();
          	echo "success!<br>";
           }
