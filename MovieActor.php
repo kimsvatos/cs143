@@ -37,10 +37,38 @@
 	<SELECT name="actor">
 		<?=$actorList?>
 	</SELECT>
-	<input type="text" name="role" size="50" maxlength="50">
+	<input type="text" name="role" size="50" maxlength="50"><br>
 	<input type="submit" value="Add Movie/Actor relationship!">
 
 </form>
+<?php
+	$quitError = 0;
+	if(($movieID = $_GET['movie'] ) == "-1"){
+		echo "Must select a movie!<br>";
+		$quitError = 1;
+	}
+	if(($actorID = $_GET['actor'] ) == "-1"){
+		echo "Must select an actor!<br>";
+		$quitError = 1;
+	}
+	if(!($role = $_GET['role'])){
+		echo "Must specify a role!<br>";
+		$quitError = 1;
+	}
+
+	if(!$quitError){
+		//do stuff we like
+		$statement = $database->prepare("INSERT INTO MovieActor (mid, aid, role) VALUES (?, ?, ?);");
+        $statement->bind_param("iis", $movieID, $actorID, $role);
+        $statement->execute();
+        echo "success!";
+	}
+
+
+?>
+
+
+
 
 
 </body>
