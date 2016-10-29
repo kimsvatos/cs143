@@ -157,7 +157,7 @@
           $id_statement = $database->prepare("UPDATE MaxMovieID SET id = $id;");
           $id_statement->execute();
 
-          for($i=0; $i < count($genreArr); $i++){
+          for($i=0; $i <= count($genreArr); $i++){
           		 $genre = array_pop($genreArr);
           		 echo "$genre<br>";
          		 $g_statement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
