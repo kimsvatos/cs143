@@ -82,9 +82,9 @@
 
           if(($genre = $_GET['action']) == "ON"){
           	echo "$genre<br>";
-        	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES ($id, \"Action\");");
-        	//$genre = "Action";
-         	//$genreStatement->bind_param("is", $id, $genre);
+        	$genreStatement = $database->prepare("INSERT INTO MovieGenre ('mid', 'genre') VALUES (?, ?);");
+        	$genre = "Action";
+         	$genreStatement->bind_param("is", $id, $genre);
          	$genreStatement->execute();
          	echo "success!<br>";
           }
