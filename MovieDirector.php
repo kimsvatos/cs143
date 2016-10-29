@@ -37,8 +37,7 @@
 	<SELECT name="director">
 		<?=$directorList?>
 	</SELECT><br>
-	<input type="text" name="role" size="50" maxlength="50"><br>
-	<input type="submit" value="Add Movie/Director relationship!">
+	<	<input type="submit" value="Add Movie/Director relationship!">
 
 </form>
 <?php
@@ -51,10 +50,7 @@
 		echo "Must select an actor!<br>";
 		$quitError = 1;
 	}
-	if(!($role = $_GET['role'])){
-		echo "Must specify a role!<br>";
-		$quitError = 1;
-	}
+
 
 	if(!$quitError){
 		//do stuff we like
