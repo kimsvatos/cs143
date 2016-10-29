@@ -80,11 +80,15 @@
           $year = $_GET['year'];
      	  $rating = $_GET['rating'];
 
-          if($action = $_GET['action']){
-        	//insert
+          if(($genre = $_GET['action']) == "ON"){
+        	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
+         	$genreStatement->bind_param("is", $id, $genre);
+         	$genreStatement->execute();
           }
-          if($adult = $_GET['adult']){
-        	//insert
+          if(($genre =$_GET['adult']) == "ON"){
+        	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
+         	$genreStatement->bind_param("is", $id, $genre);
+         	$genreStatement->execute();
           }
           if($adventure = $_GET['adventure']){
         	//insert
