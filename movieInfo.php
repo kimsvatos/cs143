@@ -83,11 +83,12 @@
      	  $k = 0;
 
           if(($genre = $_GET['action']) == "ON"){
-          	$genreArr[$k]='Action';
-          	$k++;
+          	array_push($genreArr, "Action");
+          	//$k++;
           }
           if(($genre =$_GET['adult']) == "ON"){
-        	$genreArr[$k]='Adult';
+        	//$genreArr[$k]='Adult';
+        	array_push($genreArr, "Adult");
           	$k++;
 
           }
