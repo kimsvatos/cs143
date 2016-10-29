@@ -19,7 +19,7 @@
 <h1> omg lets try it </h1>
 <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
 	<SELECT name="movie">
-		<?=$movieList?>
+		<!--<?=$movieList?>-->
 	</SELECT>
 
 </form>
