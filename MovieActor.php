@@ -18,13 +18,13 @@
 
     $actorQuery = $database->query("SELECT id, last, first, dob FROM Actor order by last;");
     $actorList = "";
-    $actorList = $movieList . "<option value=\"-1\"> Select Actor</option>";
-    while($row = $movieQuery->fetch_array(MYSQLI_ASSOC)){
+    $actorList = $actorList . "<option value=\"-1\"> Select Actor</option>";
+    while($row = $actorQuery->fetch_array(MYSQLI_ASSOC)){
     	$last = $row["last"];
     	$id = $row["id"];
     	$first = $row["first"];
      	$dob = $row["dob"];
-    	$movieList = $movieList . "<option value=\"$id\"> $last $first ($dob)</option>";
+    	$actorList = $actorList . "<option value=\"$id\"> $last $first ($dob)</option>";
 
     }
 
