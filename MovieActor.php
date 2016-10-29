@@ -7,7 +7,7 @@
     }
     $movieQuery = $database->query("SELECT id, title, year FROM Movie order by title;");
     $movieList = "";
-
+    $movieList = $movieList . "<option value=\"id\"> Select Movie </option>";
     while($row = $movieQuery->fetch_array(MYSQLI_ASSOC)){
     	$id = $row["id"];
     	$title = $row["title"];
