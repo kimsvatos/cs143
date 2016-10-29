@@ -37,7 +37,7 @@
 	<SELECT name="director">
 		<?=$directorList?>
 	</SELECT><br>
-	<	<input type="submit" value="Add Movie/Director relationship!">
+		<input type="submit" value="Add Movie/Director relationship!">
 
 </form>
 <?php
