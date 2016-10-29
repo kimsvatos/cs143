@@ -155,7 +155,7 @@
 
           for($i=0; $i < count($genreArr); $i++){
           		 $genre = $genreArr[i];
-          		 echo "$genre<br>"
+          		 echo "$genre<br>";
          		 $g_statement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
           	   	 $g_statement->bind_param("is", $id, $genre);
           	     $g_statement->execute();
