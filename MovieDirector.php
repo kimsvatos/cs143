@@ -58,8 +58,8 @@
 
 	if(!$quitError){
 		//do stuff we like
-		$statement = $database->prepare("INSERT INTO MovieActor (mid, aid, role) VALUES (?, ?, ?);");
-        $statement->bind_param("iis", $movieID, $dID, $role);
+		$statement = $database->prepare("INSERT INTO MovieActor (mid, aid) VALUES (?, ?);");
+        $statement->bind_param("ii", $movieID, $dID);
         $statement->execute();
         echo "success!";
 	}
