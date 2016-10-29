@@ -5,7 +5,7 @@
     if($database->connect_errno > 0){
         die('Unable to connect to database [' . $database->connect_error . ']');
     }
-    $movieQuery = $database->query("SELECT id, title, year FROM Movie order by title;")
+    $movieQuery = $database->query("SELECT id, title, year FROM Movie order by title;");
     $movieList = "";
     while($row = $movieQuery->fetch_array(MYSQLI_ASSOC)){
     	$id = row["id"];
