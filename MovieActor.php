@@ -11,7 +11,7 @@
     	$id = row["id"];
     	$title = row["title"];
     	$year = row["year"];
-    	$movieList = $movieList . "<option value=\"id\"> $title ($year) </option>";
+    	//$movieList = $movieList . "<option value=\"id\"> $title ($year) </option>";
 
     }
 
