@@ -89,7 +89,7 @@
           if(($genre =$_GET['adult']) == "ON"){
         	$genreArr[$k]='Adult';
           	$k++;
-          	echo "$genreArr[$k - 1] <br>";
+
           }
           if($adventure = $_GET['adventure']){
         	//insert
@@ -157,7 +157,7 @@
           $id_statement->execute();
 
           for($i=0; $i < count($genreArr); $i++){
-          		 $genre = $genreArr[i];
+          		 $genre = array_pop($genreArr);
           		 echo "$genre<br>";
          		 $g_statement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
           	   	 $g_statement->bind_param("is", $id, $genre);
