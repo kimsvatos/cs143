@@ -47,7 +47,7 @@
 		$quitError = 1;
 	}
 	if(($dID = $_GET['director'] ) == "-1"){
-		echo "Must select an actor!<br>";
+		echo "Must select a director!<br>";
 		$quitError = 1;
 	}
 
