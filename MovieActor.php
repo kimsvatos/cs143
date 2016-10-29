@@ -37,6 +37,8 @@
 	<SELECT name="actor">
 		<?=$actorList?>
 	</SELECT>
+	<input type="text" name="role" size="50" maxlength="50">
+	<input type="submit" value="Add Movie/Actor relationship!">
 
 </form>
 
