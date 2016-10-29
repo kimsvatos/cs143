@@ -84,64 +84,79 @@
 
           if(($genre = $_GET['action']) == "ON"){
           	array_push($genreArr, "Action");
-          	//$k++;
+        
           }
           if(($genre =$_GET['adult']) == "ON"){
-        	//$genreArr[$k]='Adult';
+  
         	array_push($genreArr, "Adult");
-          	$k++;
-
           }
           if($adventure = $_GET['adventure']){
         	//insert
+        	array_push($genreArr, "Adventure");
           }
           if($animation = $_GET['animation']){
         	//inser
+        	array_push($genreArr, "Animation");
           }
           if($comedy = $_GET['comedy']){
         	//insert
+        	array_push($genreArr, "Comedy");
           }
           if($crime = $_GET['crime']){
         	//insert
+        	array_push($genreArr, "Crime");
           }
           if($documentary = $_GET['documentary']){
         	//insert
+        	array_push($genreArr, "Documentary");
           }
           if($drama= $_GET['drama']){
         	//insert
+        	array_push($genreArr, "Drama");
           }
           if($family = $_GET['family']){
         	//insert
+        	array_push($genreArr, "Family");
           }
           if($fantasy = $_GET['fantasy']){
         	//insert
+        	array_push($genreArr, "Fantasy");
           }
           if($horror = $_GET['horror']){
         	//insert
+        	array_push($genreArr, "Horror");
           }
           if($musical = $_GET['musical']){
         	//insert
+        	array_push($genreArr, "Musical");
           }
           if($mystery = $_GET['mystery']){
         	//insert
+        	array_push($genreArr, "Mystery");
           }
           if($romance= $_GET['romance']){
         	//insert
+        	array_push($genreArr, "Romance");
           }
           if($scifi = $_GET['scifi']){
         	//insert
+        	array_push($genreArr, "Scifi");
           }
           if($short = $_GET['short']){
         	//insert
+        	array_push($genreArr, "Short");
           }
           if($thriller = $_GET['thriller']){
         	//insert
+        	array_push($genreArr, "Thriller");
           }
           if($war = $_GET['war']){
         	//insert
+        	array_push($genreArr, "War");
           }
           if($western = $_GET['western']){
         	//insert
+        	array_push($genreArr, "Western");
           }
 
 
@@ -157,7 +172,9 @@
           $id_statement = $database->prepare("UPDATE MaxMovieID SET id = $id;");
           $id_statement->execute();
 
-          for($i=0; $i <= count($genreArr); $i++){
+          //FUTURE REFERENCE: bounds are weird. this seems to work tho
+          $count = count($genreArr);
+          for($i=0; $i < $count; $i++){
           		 $genre = array_pop($genreArr);
           		 echo "$genre<br>";
          		 $g_statement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
