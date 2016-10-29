@@ -79,23 +79,14 @@
           $id = $result[0] + 1;
           $year = $_GET['year'];
      	  $rating = $_GET['rating'];
+     	  $genreArr = array();
+     	  
 
           if(($genre = $_GET['action']) == "ON"){
-          	echo "$genre<br>";
-        	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
-        	$genre = "Action";
-         	$genreStatement->bind_param("is", $id, $genre);
-         	if($genreStatement){
-         		$genreStatement->execute();
-         		$database->commit();
-         		echo "success!<br>";
-         	}
+          	array_push($genreArr, 'Action');
           }
           if(($genre =$_GET['adult']) == "ON"){
-        	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
-         	$genreStatement->bind_param("is", $id, $genre);
-         	$genreStatement->execute();
-         	echo "success!<br>";
+        	array_push($genreArr, 'Adventure');
           }
           if($adventure = $_GET['adventure']){
         	//insert
@@ -162,7 +153,13 @@
           $id_statement = $database->prepare("UPDATE MaxMovieID SET id = $id;");
           $id_statement->execute();
 
-         
+          for($i=0; $i < count($genreArr); $i++){
+          		 $genre = $genreArr[i];
+          		 echo "$genre<br>"
+         		 $g_statement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
+          	   	 $g_statement->bind_param("is", $id, $genre);
+          	     $g_statement->execute();
+           }
           echo "submitted!";
         }
       }
