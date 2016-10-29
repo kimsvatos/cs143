@@ -24,7 +24,7 @@
     	$id = $row["id"];
     	$first = $row["first"];
      	$dob = $row["dob"];
-    	$actorList = $actorList . "<option value=\"$id\"> $last $first ($dob)</option>";
+    	$actorList = $actorList . "<option value=\"$id\"> $first $last ($dob)</option>";
 
     }
 
@@ -36,7 +36,7 @@
 	</SELECT>
 	<SELECT name="actor">
 		<?=$actorList?>
-	</SELECT>
+	</SELECT><br>
 	<input type="text" name="role" size="50" maxlength="50"><br>
 	<input type="submit" value="Add Movie/Actor relationship!">
 
