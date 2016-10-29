@@ -80,13 +80,15 @@
           $year = $_GET['year'];
      	  $rating = $_GET['rating'];
      	  $genreArr = array();
-     	  
+     	  $k = 0;
 
           if(($genre = $_GET['action']) == "ON"){
-          	array_push($genreArr, 'Action');
+          	$genreArr[$k]='Action';
+          	$k++;
           }
           if(($genre =$_GET['adult']) == "ON"){
-        	array_push($genreArr, 'Adventure');
+        	$genreArr[$k]='Adult';
+          	$k++;
           }
           if($adventure = $_GET['adventure']){
         	//insert
