@@ -85,7 +85,7 @@
         	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
         	$genre = "Action";
          	$genreStatement->bind_param("is", $id, $genre);
-         	if($statement){
+         	if($genreStatement){
          		$genreStatement->execute();
          		$database->commit();
          		echo "success!<br>";
