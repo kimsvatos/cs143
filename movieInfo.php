@@ -18,7 +18,7 @@
       <input type="text" name="year">
       <br>
 
-      Rating:<SELECT NAME="Rating">
+      Rating:<SELECT NAME="rating">
       <OPTION SELECTED> G
       <OPTION> PG
       <OPTION> PG-13
