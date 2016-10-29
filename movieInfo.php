@@ -85,14 +85,15 @@
         	$genreStatement = $database->prepare("INSERT INTO MovieGenre (`mid`, `genre`) VALUES (?, ?);");
         	$genre = "Action";
          	$genreStatement->bind_param("is", $id, $genre);
-         	$genreStatement->execute();
-         	$database->commit();
-         	echo "success!<br>";
+         	if($statement){
+         		$genreStatement->execute();
+         		$database->commit();
+         		echo "success!<br>";
+         	}
           }
           if(($genre =$_GET['adult']) == "ON"){
         	$genreStatement = $database->prepare("INSERT INTO MovieGenre (mid, genre) VALUES (?, ?);");
          	$genreStatement->bind_param("is", $id, $genre);
-         	echo "$genreStatement<br>";
          	$genreStatement->execute();
          	echo "success!<br>";
           }
