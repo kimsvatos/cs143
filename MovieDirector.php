@@ -54,7 +54,7 @@
 
 	if(!$quitError){
 		//do stuff we like
-		$statement = $database->prepare("INSERT INTO MovieActor (mid, aid) VALUES (?, ?);");
+		$statement = $database->prepare("INSERT INTO MovieDirector (mid, aid) VALUES (?, ?);");
         $statement->bind_param("ii", $movieID, $dID);
         $statement->execute();
         echo "success!";
