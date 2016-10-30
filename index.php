@@ -25,6 +25,9 @@
     	<form method="post" action="review.php">
        		 <input type="Submit" value="MAKE A REVIEW!">
     	</form>
+        <form method="post" action="ActorInfo.php">
+           <input type="Submit" value="look up stuff about actors!">
+      </form>
 
 	</body>
 
