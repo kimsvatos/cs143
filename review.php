@@ -32,7 +32,7 @@
 
 
       Rating:<SELECT NAME="rating">
-      <OPTION SELECTED> Select a Rating
+      <OPTION SELECTED>Select a Rating
       <OPTION> 0
       <OPTION> 1
       <OPTION> 2
@@ -45,9 +45,28 @@
       <input type="textarea" name="comment" ROWS=10 COLUMNS=60><br>
       Must be 500 characters or less. 
       <br>
+<?php
+      if (!($name = $_GET['name'])) {
+          echo "Need a name<br>";
+          $quitError=1;
+        }
+        if (($movie = $_GET['movie']) == "Select Movie") {
+          echo "Need a movie!<br>";
+          $quitError=1;
+        }
+       if (($rating = $_GET['rating']) == "Select a Rating") {
+          echo "Need a movie!<br>";
+          $quitError=1;
+        }
+        if(!quitError){
+            $comment = $_GET['comment'];
 
-      
-
+            $rStatement = $database->prepare("INSERT INTO Review (name, time, mid, rating, comment) VALUES (?, NOW(), ?, ?, ?);");
+            $rStatement->bind_param("siis", $name, $movie, $rating, $comment);
+            $rStatement->execute();
+            echo "success!?";
+        }
+?>
 
  	  <br>
       <input type="submit" value="Submit">
