@@ -16,7 +16,7 @@
    	    	 die('Unable to connect to database [' . $database->connect_error . ']');
    		}
    		//"kyle haacker"
-   		$query = "SELECT id, first, last, dob FROM Actor where last like %$name% or first like %$name%;";
+   		$query = "SELECT id, first, last, dob FROM Actor where last like $name or first like $name;";
         $result = $database->query($query);
         echo "<table border='1' bordercolor='black' cellpadding='2'>";
         echo "<tr>";
