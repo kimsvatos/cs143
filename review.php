@@ -59,15 +59,16 @@
           $quitError=1;
         }
        if (($rating = $_GET['rating']) == "Select a Rating") {
-          echo "Need a movie!<br>";
+          echo "Need a rating!<br>";
           $quitError=1;
         }
         if(!$quitError){
+            echo "hello";
             $comment = $_GET['comment'];
 
-            $rStatement = $database->prepare("INSERT INTO Review (name, `time`, mid, rating, comment) VALUES (?, ?, `NOW()`, ?, ?);");
+            $rStatement = $database->prepare("INSERT INTO Review (name, `time`, mid, rating, comment) VALUES (?, `NOW()`, ?, ?, ?);");
            // $timeS = '2016-01-01 12:12:12';
-            $rStatement->bind_param("ssiis", $name, $timeS, $movie, $rating, $comment);
+            $rStatement->bind_param("siis", $name, $movie, $rating, $comment);
             $rStatement->execute();
 
             echo "success!?";
