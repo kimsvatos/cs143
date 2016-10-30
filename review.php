@@ -40,7 +40,8 @@
       <OPTION> 4
       <OPTION> 5
       </SELECT>
-      <br>
+      <br><br><br>
+      <h4>Comments:</h4>
       <input type="textarea" name="comment" ROWS=10 COLUMNS=60><br>
       Must be 500 characters or less. 
       <br>
