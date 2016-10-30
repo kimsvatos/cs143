@@ -65,8 +65,8 @@
         if(!$quitError){
             $comment = $_GET['comment'];
 
-            $rStatement = $database->prepare("INSERT INTO Review (name, `time`, mid, rating, comment) VALUES (?, ?, ?, ?, ?);");
-            $timeS = '2016-01-01 12:12:12';
+            $rStatement = $database->prepare("INSERT INTO Review (name, `time`, mid, rating, comment) VALUES (?, ?, `NOW()`, ?, ?);");
+           // $timeS = '2016-01-01 12:12:12';
             $rStatement->bind_param("ssiis", $name, $timeS, $movie, $rating, $comment);
             $rStatement->execute();
 
