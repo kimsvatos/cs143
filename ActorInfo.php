@@ -20,6 +20,7 @@
    		$i=0;
    		$query = "SELECT id, first, last, dob FROM Actor";
    		while($i < count($words)){
+   			echo "$words[i] is in row $i<br>";
    			if($i == 0){
    				$query = $query . " WHERE";
    			}
@@ -45,9 +46,10 @@
         echo "</tr>";
         echo "hello";
         //while($rStatement->fetch()){
+        $i = 0;
         while($row = $result->fetch_array(MYSQLI_ASSOC)){
-        	echo "hi";
-
+        	echo "$i";
+        	$i++;
         ///fix 
         	$name = $row['first'] . " " . $row['last'];
         	$dob = $row['dob'];
