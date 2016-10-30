@@ -41,6 +41,7 @@
 
 </form>
 <?php
+    if ($_SERVER["REQUEST_METHOD"] == "GET"){
 	$quitError = 0;
 	if(($movieID = $_GET['movie'] ) == "-1"){
 		echo "Must select a movie!<br>";
@@ -59,7 +60,7 @@
         $statement->execute();
         echo "success!";
 	}
-
+}
 
 ?>
 
