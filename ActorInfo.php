@@ -24,7 +24,7 @@
    				$query = $query . " WHERE";
    			}
    			else{
-   				$query = $query . " and"
+   				$query = $query . " and";
    			}
    		$query = $query . " (last like '%$words[i]%' or first like '%$words[i]%')";
    		//$query = "SELECT * FROM Actor order by last";
