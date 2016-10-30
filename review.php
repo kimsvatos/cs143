@@ -27,7 +27,7 @@
       Movie 
       <SELECT name="movie">
             <?=$movieList?>
-      </SELECT><br>
+      </SELECT><br><br>
 
 
 
