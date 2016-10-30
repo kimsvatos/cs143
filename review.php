@@ -49,6 +49,7 @@
       <input type="submit" value="Submit">
    </form>
 <?php
+      $quitError=0;
       if (!($name = $_GET['name'])) {
           echo "Need a name<br>";
           $quitError=1;
