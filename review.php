@@ -68,7 +68,9 @@
 
             $rStatement = $database->prepare("INSERT INTO Review (name, `time`, mid, rating, comment) VALUES (?, `NOW()`, ?, ?, ?);");
            // $timeS = '2016-01-01 12:12:12';
+            echo "here!";
             $rStatement->bind_param("siis", $name, $movie, $rating, $comment);
+            echo "hola!";
             $rStatement->execute();
 
             echo "success!?";
