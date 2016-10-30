@@ -15,6 +15,7 @@
     	if($database->connect_errno > 0){
    	    	 die('Unable to connect to database [' . $database->connect_error . ']');
    		}
+   		//"kyle haacker"
    		$query = "SELECT id, first, last, dob FROM Actor where last like $name or first like $name;";
         $result = $database->query($query);
         echo "<table border='1' bordercolor='black' cellpadding='2'>";
@@ -23,7 +24,7 @@
         echo "<th>Date of Birth</th>";
         echo "</tr>";
         while($iter= $result->fetch_array(MYSQLI_ASSOC)){
-        	
+        	echo "hi";
         	$name = $iter['first'] . " " . $iter['last'];
         	$dob = $iter['dob'];
         	$id = $iter['id'];
@@ -33,6 +34,7 @@
         	echo "<td> $dob </td>";
         	echo "</tr>";
         }
+        echo "</table>";
 
 
 
