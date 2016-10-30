@@ -67,7 +67,7 @@
             $comment = $_GET['comment'];
 
             $rStatement = $database->prepare("INSERT INTO Review (name, `time`, mid, rating, comment) VALUES (?, ?, ?, ?, ?);");
-            $timeS = time();
+            $timeS = date();
             echo "here!";
             $rStatement->bind_param("ssiis", $name, $timeS, $movie, $rating, $comment);
             echo "hola!";
