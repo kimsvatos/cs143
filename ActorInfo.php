@@ -26,10 +26,10 @@
    			else{
    				$query = $query . " and";
    			}
-   		$query = $query . " (last like '%$words[i]%' or first like '%$words[i]%')";
+   		   $query = $query . " (last like '%$words[i]%' or first like '%$words[i]%')";
    		//$query = "SELECT * FROM Actor order by last";
    		//$rStatement = $database->prepare("SELECT id, first, last, dob FROM Actor where last like ? or first like ?;");
-        $i = $i + 1;
+	       $i = $i + 1;
         }
         $query = $query . ";";
     	$result = $database->query($query);
@@ -45,7 +45,7 @@
         echo "</tr>";
         echo "hello";
         //while($rStatement->fetch()){
-        while($row = $result->fetch_array(MYSQLI_ASSOC)){}
+        while($row = $result->fetch_array(MYSQLI_ASSOC)){
         	echo "hi";
 
         ///fix 
