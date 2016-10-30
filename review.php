@@ -31,9 +31,6 @@
 
 
 
-      <br>
-      <input type="text" name="company">
-      <br>
       Rating:<SELECT NAME="rating">
       <OPTION SELECTED> Select a Rating
       <OPTION> 0
