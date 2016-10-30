@@ -45,6 +45,9 @@
       <input type="textarea" name="comment" ROWS=10 COLUMNS=60><br>
       Must be 500 characters or less. 
       <br>
+      <br>
+      <input type="submit" value="Submit">
+   </form>
 <?php
       if (!($name = $_GET['name'])) {
           echo "Need a name<br>";
@@ -68,9 +71,7 @@
         }
 ?>
 
- 	  <br>
-      <input type="submit" value="Submit">
-   </form>
+ 	  
 
 
 
