@@ -19,6 +19,7 @@
    		//"kyle haacker"
    		$i=0;
    		$query = "SELECT id, first, last, dob FROM Actor";
+   		echo count($words);
    		while($i < count($words)){
    			echo "$words[i] is in row $i<br>";
    			if($i == 0){
