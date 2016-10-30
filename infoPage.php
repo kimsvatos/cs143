@@ -3,7 +3,7 @@
 		<title> CS143 Lab 1C </title>
 	</head>
 	<body>
-		<marquee>
+		
 		<h1> Hola Mundo! </h1>
 		Welcome to Kim + Kyles endless adventure website of movies and actors!!!<br>
 		Plz click any link below to navigate to some rad places, dude!
@@ -14,9 +14,18 @@
        		 <input type="Submit" value="Insert a New Actor/Director">
     	</form>
     	<form method="post" action="movieInfo.php">
-       		 <input type="Submit" value="see sum infoz">
+       		 <input type="Submit" value="Insert a New Movie">
     	</form>
-    </marquee>
+    	<form method="post" action="movieActor.php">
+       		 <input type="Submit" value="Add a Movie/Actor relationship!">
+    	</form>
+    	<form method="post" action="MovieDirector.php">
+       		 <input type="Submit" value="Add a Movie/Director relationship!">
+    	</form>
+    	<form method="post" action="review.php">
+       		 <input type="Submit" value="MAKE A REVIEW!">
+    	</form>
+
 	</body>
 
 </html>
