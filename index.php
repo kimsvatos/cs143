@@ -22,7 +22,9 @@
     	<form method="post" action="MovieDirector.php">
        		 <input type="Submit" value="Add a Movie/Director relationship!">
     	</form>
-    	
+    	<form method="post" action="review.php">
+       		 <input type="Submit" value="MAKE A REVIEW!">
+    	</form>
 
 	</body>
 
