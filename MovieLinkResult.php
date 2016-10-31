@@ -13,7 +13,7 @@
     }
 
   
-    $id_query = "SELECT title, dob, company, year, rating, concat(first,' ',last) directorName, genre FROM Movie m, Director d, MovieDirector md, MovieGenre mg WHERE m.id = $id and m.id = md.mid and d.id = md.did and m.id = mg.mid;";
+    $id_query = "SELECT title, dob, company, year, rating, concat(first,' ',last) directorName, genre FROM Movie m LEFT OUTER JOIN MovieGenre mg ON m.id = mg.mid LEFT OUTER JOIN MovieDirector md ON m.id = md.mid LEFT OUTER JOIN Director d ON d.id = md.did WHERE m.id = $id;";
     $queryRes = $database->query($id_query);
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
         $title = $result['title'];
