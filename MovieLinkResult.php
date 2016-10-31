@@ -29,10 +29,14 @@
     echo "Title: " . $title . " (" . $year . ")<br>";
     echo "Company: " . $comp . "<br>";
     echo "Rating: " . $rating . "<br>";
-    echo "Director: " . $dir . " (" . $dob . ")<br>";
+    if($dir == "0" || $dir == NULL){
+        echo "Director: <br>";
+    }
+    else{
+        echo "Director: " . $dir . " (" . $dob . ")<br>";
+    }
+    
     echo "Genre: " . $genre . "<br>";
-
-
     echo "<h1> Actors in this movie: </h1>";
     echo "<table border='1' bordercolor='black' cellpadding='2'>";
     echo "<tr>";
