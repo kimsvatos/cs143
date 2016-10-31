@@ -59,8 +59,8 @@
 
 
         	echo "<tr>";
-        	echo "<td> <a href=\"LinkResult.php?id=".$row["id"]."\">".$name."</a></td>";
-        	echo "<td> <a href=\"LinkResult.php?id=".$row["id"]."\">".$dob."</a> </td>";
+        	echo "<td> <a href=\"ActorLinkResult.php?id=".$row["id"]."\">".$name."</a></td>";
+        	echo "<td> <a href=\"ActorLinkResult.php?id=".$row["id"]."\">".$dob."</a> </td>";
         	echo "</tr>";
         }
         echo "</table>";
