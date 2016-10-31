@@ -48,7 +48,7 @@
     $queryRes = $database->query($id_query);
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
         echo "<tr>";
-        echo "<a href=\"ActorLinkResult.php?id=".$result["res"]."\">".$result['actorName']."</a>";
+        echo "<td><a href=\"ActorLinkResult.php?id=".$result["res"]."\">".$result['actorName']."</a></td>";
         //echo "<td>" . $result['actorName'] . "</td>";
         echo "<td>" . $result['role'] . "</td>";
         echo "</tr>";
