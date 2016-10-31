@@ -12,6 +12,10 @@
     }
 
     echo "$id";
+    $id_query = "SELECT first, last, dob, dod FROM Actor WHERE id=$id;";
+    $queryRes = $database->query($id_query);
+    $result = $queryRes->fetch_array(MYSQLI_ASSOC);
+    echo "$result[0]";
 ?>
 
 </body>
