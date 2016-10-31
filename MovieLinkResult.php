@@ -13,12 +13,13 @@
     }
 
   
-    $id_query = "SELECT title, company, year, rating, concat(first,' ',last) directorName, genre FROM Movie m, Director d, MovieDirector md, MovieGenre mg WHERE m.id = 4224 and m.id = md.mid and d.id = md.did and m.id = mg.mid;";
+    $id_query = "SELECT title, dob, company, year, rating, concat(first,' ',last) directorName, genre FROM Movie m, Director d, MovieDirector md, MovieGenre mg WHERE m.id = 4224 and m.id = md.mid and d.id = md.did and m.id = mg.mid;";
     $queryRes = $database->query($id_query);
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
         $title = $result['title'];
         $year = $result['year'];
         $dir = $result['directorName'];
+        $dob = $result['dob'];
         $comp = $result['company'];
         $rating = $result['rating'];
         $genre = $genre . " " . $result['genre'];
@@ -28,7 +29,7 @@
     echo "Title: " . $title . " (" . $year . ")<br>";
     echo "Company: " . $comp . "<br>";
     echo "Rating: " . $rating . "<br>";
-    echo "Director: " . $dir . "<br>";
+    echo "Director: " . $dir . " (" . $dob . ")<br>";
     echo "Genre: " . $genre . "<br>";
 
 
