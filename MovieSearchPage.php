@@ -1,5 +1,5 @@
 <html>
-<h1> Actor Information!</h1>
+<h1> MOVIE Information!</h1>
 <body>
 	<form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
 		<input type="text" size="80" name="search">
