@@ -2,8 +2,9 @@
 <body>
 
 
-<h1>Movie RESULTUTLTLSDJLSD</h1>
+<h1>Movie Information Page:</h1>
 <!-- do queries and show table with DOB name DOD blah --> 
+<h3> Movie Information is:</h3>
 <?php
 	$id = $_GET['id'];
 	$database = new mysqli('localhost', 'cs143', '', 'CS143');
@@ -12,20 +13,35 @@
     }
 
   
-    $id_query = "SELECT first, last, dob, sex, dod FROM Actor WHERE id=$id;";
+    $id_query = "SELECT title, company, rating, concat(first,' ',last) directorName, genre FROM Movie m, Director d, MovieDirector md, MovieGenre mg WHERE m.id = 4224 and m.id = md.mid and d.id = md.did and m.id = mg.mid;";
     $queryRes = $database->query($id_query);
-    $result = $queryRes->fetch_array(MYSQLI_ASSOC);
+    while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
+        $title = $result['title'];
+        $dir = $result['directorName'];
+        $comp = $result['company'];
+        $rating = $result['rating'];
+        $genre = $genre . " " . $result['genre'];
+    }
+
+
+    echo "Title: " . $title . " (" . $year . ")";
+    echo "Company: " . $comp;
+    echo "Rating: " . $rating;
+    echo "Director: " . $dir;
+    echo "Genre: " . $genre;
+
+
+    
     echo $result['last'];
-    echo " <h1> Actor Information is: </h1>";
+    echo " <h1> Actors in this movie: </h1>";
     echo "<table border='1' bordercolor='black' cellpadding='2'>";
     echo "<tr>";
     echo "<th>Actor Name</th>";
-    echo "<th>Sex</th>";
-    echo "<th>Date of Birth</th>";
-    echo "<th>Date of Death</th>";
+    echo "<th>Role</th>";
     echo "</tr>";
 
-    //add info below
+    //QUERY FOR ACTORS AND ROLES 
+
     echo "<tr>";
     echo "<td>" . $result['first'] . " " . $result['last'] . "</td>";
 	echo "<td>" . $result['sex'] . "</td>";
