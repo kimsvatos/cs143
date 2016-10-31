@@ -28,6 +28,9 @@
         <form method="post" action="ActorInfo.php">
            <input type="Submit" value="look up stuff about actors!">
       </form>
+         <form method="post" action="MovieSearchPage.php">
+           <input type="Submit" value="look up stuff about MOVIES!">
+      </form>
 
 	</body>
 
