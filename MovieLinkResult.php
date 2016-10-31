@@ -44,11 +44,12 @@
     echo "<th>Role</th>";
     echo "</tr>";
 
-    $id_query = "SELECT CONCAT(a.first,' ',a.last) actorName, ma.role FROM Actor a, Movie m, MovieActor ma WHERE m.id = $id and ma.mid = m.id and ma.aid = a.id;";
+    $id_query = "SELECT CONCAT(a.first,' ',a.last) actorName, a.id res, ma.role FROM Actor a, Movie m, MovieActor ma WHERE m.id = $id and ma.mid = m.id and ma.aid = a.id;";
     $queryRes = $database->query($id_query);
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
         echo "<tr>";
-        echo "<td>" . $result['actorName'] . "</td>";
+        echo "<a href=\"ActorLinkResult.php?id=".$result["res"]."\">".$result['actorName']."</a>";
+        //echo "<td>" . $result['actorName'] . "</td>";
         echo "<td>" . $result['role'] . "</td>";
         echo "</tr>";
     }
