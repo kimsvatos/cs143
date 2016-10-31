@@ -28,10 +28,10 @@
    			else{
    				$query = $query . " and";
    			}
-   		   $query = $query . " (last like '%$words[i]%' or first like '%$words[i]%')";
+   		   $query = $query . " (last like '%$words[$i]%' or first like '%$words[$i]%')";
    		//$query = "SELECT * FROM Actor order by last";
    		//$rStatement = $database->prepare("SELECT id, first, last, dob FROM Actor where last like ? or first like ?;");
-	       $i = $i + 1;
+	       $i++;
         }
         $query = $query . ";";
     	$result = $database->query($query);
