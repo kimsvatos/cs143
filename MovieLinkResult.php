@@ -17,7 +17,7 @@
     $queryRes = $database->query($id_query);
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
         $title = $result['title'];
-        $year = $result['year']''
+        $year = $result['year'];
         $dir = $result['directorName'];
         $comp = $result['company'];
         $rating = $result['rating'];
