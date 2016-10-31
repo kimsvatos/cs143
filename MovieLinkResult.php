@@ -13,7 +13,7 @@
     }
 
   
-    $id_query = "SELECT title, dob, company, year, rating, concat(first,' ',last) directorName, genre FROM Movie m, Director d, MovieDirector md, MovieGenre mg WHERE m.id = 4224 and m.id = md.mid and d.id = md.did and m.id = mg.mid;";
+    $id_query = "SELECT title, dob, company, year, rating, concat(first,' ',last) directorName, genre FROM Movie m, Director d, MovieDirector md, MovieGenre mg WHERE m.id = $id and m.id = md.mid and d.id = md.did and m.id = mg.mid;";
     $queryRes = $database->query($id_query);
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
         $title = $result['title'];
@@ -33,30 +33,24 @@
     echo "Genre: " . $genre . "<br>";
 
 
-    
-    echo $result['last'];
-    echo " <h1> Actors in this movie: </h1>";
+    echo "<h1> Actors in this movie: </h1>";
     echo "<table border='1' bordercolor='black' cellpadding='2'>";
     echo "<tr>";
     echo "<th>Actor Name</th>";
     echo "<th>Role</th>";
     echo "</tr>";
 
-    //QUERY FOR ACTORS AND ROLES 
+    $id_query = "SELECT CONCAT(a.first,' ',a.last) actorName, ma.role FROM Actor a, Movie m, MovieActor ma WHERE m.id = $id and ma.mid = m.id and ma.aid = a.id;";
+    $queryRes = $database->query($id_query);
+    while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
+        echo "<tr>";
+        echo "<td>" . $result['actorName'] . "</td>";
+        echo "<td>" . $result['role'] . "</td>";
+        echo "</tr>";
+    }
 
-    echo "<tr>";
-    echo "<td>" . $result['first'] . " " . $result['last'] . "</td>";
-	echo "<td>" . $result['sex'] . "</td>";
-	echo "<td>" . $result['dob'] . "</td>";
-	if($result['dod'] == NULL){
-		echo "<td> N/A </td>";
-	}
-	else{
-		echo "<td>" . $result['dod'] . "</td>";
-	}
-	echo "</tr>";
-	echo "</table>";
-
+    echo "</table>";
+/*
 	//movie info 
 	$id_query = "SELECT role, title from MovieActor, Movie WHERE aid = $id AND mid=id";
     $queryRes = $database->query($id_query);
@@ -81,7 +75,7 @@
 	}	
 
 	echo "</table>";
-   // echo "</table>";
+   // echo "</table>";*/
 ?>
 	<form method="post" action="ActorInfo.php">
         <input type="Submit" value="Go back to make another search!">
