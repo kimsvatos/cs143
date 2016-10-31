@@ -55,10 +55,12 @@
         	$name = $row['first'] . " " . $row['last'];
         	$dob = $row['dob'];
         	$id = $row['id'];
+        	
+
 
         	echo "<tr>";
-        	echo "<td> $name </td>";
-        	echo "<td> $dob </td>";
+        	echo "<td> <a href=\"LinkResult.php?id=".$row["id"]."\">".$name."</a></td>";
+        	echo "<td> <a href=\"LinkResult.php?id=".$row["id"]."\">".$dob."</a> </td>";
         	echo "</tr>";
         }
         echo "</table>";
