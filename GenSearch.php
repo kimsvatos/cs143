@@ -66,7 +66,7 @@
         echo "</table>";
 
         //SECOND SEARCH!! ACTOR!
-
+/*
         $i=0;
    		$query = "SELECT id, concat(first, " ", last) fullName, dob FROM Actor";
    		echo count($words);
@@ -114,7 +114,7 @@
 
 
 
-
+*/
 
 
 
