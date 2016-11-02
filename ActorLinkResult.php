@@ -40,7 +40,7 @@
 	echo "</table>";
 
 	//movie info 
-	$id_query = "SELECT role, title from MovieActor, Movie WHERE aid = $id AND mid=id";
+	$id_query = "SELECT role, id, title from MovieActor, Movie WHERE aid = $id AND mid=id";
     $queryRes = $database->query($id_query);
     
 	///next table
@@ -56,8 +56,10 @@
 
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
     echo "<tr>";
-    echo "<td>" . $result['title'] . "</td>"; //this will link to MOVIElinkResult
-	echo "<td>" . $result['role'] . "</td>";
+    echo "<td> <a href=\"MovieLinkResult.php?id=".$result["id"]."\">".$result['title']."</a></td>";
+    //echo "<td>" . $result['title'] . "</td>"; //this will link to MOVIElinkResult
+    echo "<td> <a href=\"MovieLinkResult.php?id=".$result["id"]."\">".$result['role']."</a></td>";
+	//echo "<td>" . $result['role'] . "</td>";
 	
 	echo "</tr>";
 	}	
