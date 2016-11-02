@@ -111,27 +111,22 @@
         $query = $query . ";";
     	  $result = $database->query($query);
 
-
         echo "<table border='1' bordercolor='black' cellpadding='2'>";
         echo "<tr>";
         echo "<th>Title</th>";
         echo "<th>Year</th>";
         echo "</tr>";
       
-
-   
         $i = 0;
         while($row = $result->fetch_array(MYSQLI_ASSOC)){
-        	echo "$i";
-        	$i++;
+        //	echo "$i";
+        //	$i++;
 
         ///fix 
         	$title = $row['title'];
         	$year = $row['year'];
         	$id = $row['id'];
         	
-
-
         	echo "<tr>";
         	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\">".$title."</a></td>";
         	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\">".$year."</a> </td>";
