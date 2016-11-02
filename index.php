@@ -67,7 +67,8 @@
      
      Please select from an option on the left! You may add a person, movie, or relationship to our database, <br>
      write a review, or do a search on movies, actors or people to discover films and roles!
-
+<br><br><br><br><br>
+      Database made for UCLA CS 143, by Kyle Haacker and Kim Svatos
 
 
 
