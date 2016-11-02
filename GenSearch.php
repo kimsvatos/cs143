@@ -21,7 +21,7 @@
    		$query = "SELECT id, title, year FROM Movie";
    		echo count($words);
    		while($i < count($words)){
-   			echo "$words[$i] is in row $i<br>";
+   			//echo "$words[$i] is in row $i<br>";
    			if($i == 0){
    				$query = $query . " WHERE";
    			}
@@ -71,7 +71,7 @@
    		$query = "SELECT id, concat(first, ' ', last) fullName, dob FROM Actor";
    		echo count($words);
    		while($i < count($words)){
-   			echo "$words[$i] is in row $i<br>";
+   			//echo "$words[$i] is in row $i<br>";
    			if($i == 0){
    				$query = $query . " WHERE";
    			}
