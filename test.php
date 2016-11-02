@@ -141,6 +141,11 @@
         }
 
         # TODO: Compare dob to dod
+        if (($quitError == 0) AND (strcmp($dob, $dod) > 0) {
+          echo "Date of birth cannot be after date of death.";
+          $quitError = 1;
+          $dateError = 1;
+        }
 
         if(!$quitError){
 
