@@ -6,6 +6,8 @@
     <style>
       body {
           margin: 0;
+          padding: 0;
+          font-family: "Arial", sans-serif;
       }
       ul {
           list-style-type: none;
@@ -41,9 +43,41 @@
           padding: 8px 8px;
       }
 
-      li a:hover:not(.active, .header) {
+      li a:hover:not(.active):not(.header)
+      {
           background-color: #66B3FF;
           color: black;
+      }
+
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 120px;
+        height: 24px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.05em;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+      }
+
+      input[type=text] {
+        padding: 5px;
+        width: 100%;
+        border: none;
+        border-bottom: solid 2px #C9C9C9;
+        transition: border 0.4s;
+        outline: none;
+        font-family: "Arial", sans-serif;
+      }
+
+      input[type=text]:focus,
+      input[type=text].focus {
+        border-bottom: solid 2px #000000;
+        color: black;
       }
 
     </style>
@@ -72,7 +106,7 @@
       
       <br><br>
 
-      <b>First Name</b> <br> <INPUT TYPE="text" name="firstName" size="50" maxlength="20" placeholder="e.g., John">
+      <b>First Name</b> <br> <INPUT TYPE="text" name="firstName"  maxlength="20" placeholder="e.g., John">
 
       <br><br>
       

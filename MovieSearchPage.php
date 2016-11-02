@@ -45,6 +45,7 @@
           background-color: #66B3FF;
           color: black;
       }
+
       table {
           border-collapse: collapse;
            width: 100%;
@@ -57,6 +58,21 @@
         }
 
 tr:hover{background-color:#f5f5f5}
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 130px;
+        height: 28px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.02em;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+      }
+
     </style>
   </head>
   <body>
@@ -78,7 +94,7 @@ tr:hover{background-color:#f5f5f5}
     <h1>Search Movies</h1>
 	  
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
-		<input type="text" size="80" name="search">
+		<input type="text" size="80" maxlength="200" name="search" placeholder="Max 200 characters"><br><br>
 		<input type="Submit" value="Search Movies!">
 	  </form>
 

@@ -45,6 +45,36 @@
           background-color: #66B3FF;
           color: black;
       }
+
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 125px;
+        height: 28px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.05em;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+      }
+
+      input[type=text] {
+        padding: 5px;
+        border: none;
+        border-bottom: solid 2px #C9C9C9;
+        transition: border 0.4s;
+        outline: none;
+      }
+
+      input[type=text]:focus,
+      input[type=text].focus {
+        border-bottom: solid 2px #000000;
+        color: black;
+      }
+
     </style>
   </head>
   <body>
@@ -66,7 +96,7 @@
     <h1>Search All</h1>
 
 	<form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
-		<input type="text" size="80" name="search">
+		<input type="text" size="80" maxlength="200" name="search" placeholder="Max 200 characters"><br><br>
 		<input type="Submit" value="Search All!">
 	</form>
 <?php
