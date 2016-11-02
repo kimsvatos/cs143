@@ -71,6 +71,7 @@ tr:hover{background-color:#f5f5f5}
       input[type=submit]:hover {
         background: #66B3FF;
         color: white;
+        font-weight:bold;
       }
 
     </style>
@@ -142,8 +143,8 @@ tr:hover{background-color:#f5f5f5}
         	$id = $row['id'];
         	
         	echo "<tr>";     
-        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\"  style=\"color: #fb3f00; text-decoration: none;\">".$title."</a></td>";
-        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\"  style=\"color: #fb3f00; text-decoration: none;\">".$year."</a> </td>";
+        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\"  style=\"color: #5097C9; text-decoration: none;\">".$title."</a></td>";
+        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\"  style=\"color: #5097C9; text-decoration: none;\">".$year."</a> </td>";
         	echo "</tr>";
         }
         echo "</table>";
