@@ -1,108 +1,10 @@
-  <head>
+<html>
+<head>
     <title>
       CS143 Movie Database
     </title>
-    <style>
-      body {
-          margin: 0;
-          padding: 0;
-          font-family: "Arial", sans-serif;
-      }
-
-      ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          width: 25%;
-          background-color: #A9A9A9;
-          position: fixed;
-          height: 100%;
-          overflow: auto;
-      }
-
-      div#banner {
-        display: block;
-        padding: 0px 15px;
-        position: fixed;
-        top: 0;
-        left: 25%;
-        width: 100%;
-        background-color: #065790;
-      }
-
-      div#main-body {
-        padding-top: 95px;
-      }
-
-      h1 {
-        color: white;
-        padding: 1px 1px;
-      }
-
-      li a {
-          display: block;
-          color: #000;
-          padding: 8px 16px;
-          text-decoration: none;
-          font-family: "Arial", sans-serif;
-      }
-
-      li a.home {
-          padding: 8px 8px;
-      }
-
-      li a.active {
-          background-color: #0080FF;
-          color: black;
-      }
-
-      li a.header {
-          background-color: #000000;
-          color: white;
-          padding: 8px 8px;
-      }
-
-      li a:hover:not(.active, .header) {
-          background-color: #66B3FF;
-          color: black;
-      }
-
-      input[type=submit] {
-        background: #CCCCCC;
-        border: 1px solid #000000;
-        border-radius: 25px;
-        width: 150px;
-        height: 30px;
-        font-family: "Arial", sans-serif;
-        font-size: 1.02em;
-      }
-
-      input[type=submit]:hover {
-        background: #66B3FF;
-        color: white;
-      }
-
-      tr:hover{background-color:#f5f5f5}
-      input[type=submit] {
-        background: #CCCCCC;
-        border: 1px solid #000000;
-        border-radius: 25px;
-        width: 130px;
-        height: 28px;
-        font-family: "Arial", sans-serif;
-        font-size: 11px; 
-        font-weight: bold;
-      }
-
-      input[type=submit]:hover {
-        background: #66B3FF;
-        color: white;
-        font-weight: bold;
-      }
-
-      
-    </style>
-  </head>
+    <link rel=StyleSheet HREF="./style.css" TYPE="text/css" MEDIA="screen">
+</head>
   <body>
     <ul>
       <li><a class="home" href="./index.php">Home</a></li>
@@ -139,9 +41,8 @@
     $id_query = "SELECT first, last, dob, sex, dod FROM Actor WHERE id=$id;";
     $queryRes = $database->query($id_query);
     $result = $queryRes->fetch_array(MYSQLI_ASSOC);
-    echo $result['last'];
-    echo " <h1> Actor Information is: </h1>";
-    echo "<table border='1' bordercolor='black' cellpadding='2'>";
+
+    echo "<table>";
     echo "<tr>";
     echo "<th>Actor Name</th>";
     echo "<th>Sex</th>";
@@ -168,8 +69,8 @@
     $queryRes = $database->query($id_query);
     
 	///next table
-    echo "<h1> Actor's Movies and Role:</h1>";
-    echo "<table cellpadding='2'>";
+    echo "<h1> Actor's Movies and Roles:</h1>";
+    echo "<table>";
     echo "<tr>";
     echo "<th>Movie Title</th>";
     echo "<th>Role</th>";
@@ -188,6 +89,7 @@
 //}
 ?>
 	<form method="post" action="ActorInfo.php">
+        <br>
         <input type="Submit" value="Go back to make another search!">
     </form>
 </div>

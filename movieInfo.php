@@ -3,106 +3,7 @@
     <title>
       CS143 Movie Database
     </title>
-    <style>
-      body {
-          margin: 0;
-          padding: 0;
-          font-family: "Arial", sans-serif;
-      }
-
-      ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          width: 25%;
-          background-color: #A9A9A9;
-          position: fixed;
-          height: 100%;
-          overflow: auto;
-      }
-
-      div#banner {
-        display: block;
-        padding: 0px 15px;
-        position: fixed;
-        top: 0;
-        left: 25%;
-        width: 100%;
-        background-color: #065790;
-      }
-
-      div#main-body {
-        padding-top: 95px;
-      }
-
-      h1 {
-        color: white;
-        padding: 1px 1px;
-      }
-
-      li a {
-          display: block;
-          color: #000;
-          padding: 8px 16px;
-          text-decoration: none;
-          font-family: "Arial", sans-serif;
-      }
-
-      li a.home {
-          padding: 8px 8px;
-      }
-
-      li a.active {
-          background-color: #0080FF;
-          color: black;
-      }
-
-      li a.header {
-          background-color: #000000;
-          color: white;
-          padding: 8px 8px;
-      }
-
-      li a:hover:not(.active, .header) {
-          background-color: #66B3FF;
-          color: black;
-      }
-
-      input[type=submit] {
-        background: #CCCCCC;
-        border: 1px solid #000000;
-        border-radius: 25px;
-        width: 150px;
-        height: 30px;
-        font-family: "Arial", sans-serif;
-        font-size: 1.02em;
-      }
-
-      input[type=submit]:hover {
-        background: #66B3FF;
-        color: white;
-      }
-
-      tr:hover{background-color:#f5f5f5}
-      input[type=submit] {
-        background: #CCCCCC;
-        border: 1px solid #000000;
-        border-radius: 25px;
-        width: 130px;
-        height: 28px;
-        font-family: "Arial", sans-serif;
-        font-size: 11px; 
-        font-weight: bold;
-      }
-
-      input[type=submit]:hover {
-        background: #66B3FF;
-        color: white;
-        font-weight: bold;
-      }
-
-      
-    </style>
+    <link rel=StyleSheet HREF="./style.css" TYPE="text/css" MEDIA="screen">
   </head>
   <body>
     <ul>
@@ -121,13 +22,11 @@
 
     <div style="margin-left:25%; padding:1px 16px; height:auto;">
     <div id="banner">
-      <div id="banner-content"><h1>Add a Movie</h1>
+      <div id="banner-content"><h1>Add New Movie</h1>
       </div>
     </div>
 
     <div id="main-body">
-
-    <h1>Add New Movie</h1>
 
 	  <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
      
@@ -156,8 +55,6 @@
       <br><br>
 
       <b>Genre</b> <br>
-
-        <!--TODO: turn into table???-->
 
       Action<input type="checkbox" name="action" value="ON">
  	  Adult<input type="checkbox" name="adult" value="ON">
