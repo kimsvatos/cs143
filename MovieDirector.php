@@ -6,7 +6,10 @@
     <style>
       body {
           margin: 0;
+          padding: 0;
+          font-family: "Arial", sans-serif;
       }
+
       ul {
           list-style-type: none;
           margin: 0;
@@ -16,6 +19,25 @@
           position: fixed;
           height: 100%;
           overflow: auto;
+      }
+
+      div#banner {
+        display: block;
+        padding: 0px 15px;
+        position: fixed;
+        top: 0;
+        left: 25%;
+        width: 100%;
+        background-color: #065790;
+      }
+
+      div#main-body {
+        padding-top: 95px;
+      }
+
+      h1 {
+        color: white;
+        padding: 1px 1px;
       }
 
       li a {
@@ -60,8 +82,50 @@
         background: #66B3FF;
         color: white;
       }
+
+      tr:hover{background-color:#f5f5f5}
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 130px;
+        height: 28px;
+        font-family: "Arial", sans-serif;
+        font-size: 11px; 
+        font-weight: bold;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+        font-weight: bold;
+      }
+
+      
     </style>
   </head>
+  <body>
+    <ul>
+      <li><a class="home" href="./index.php">Home</a></li>
+      <li><a class="header">Add Content</a></li>
+      <li><a href="./test.php">Add New Actor/Director</a></li>
+      <li><a href="./movieInfo.php">Add New Movie</a></li>
+      <li><a class="active" href="./movieActor.php">Add Movie/Actor Relationship</a></li>
+      <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
+      <li><a href="./review.php">Add Review</a></li>
+      <li><a class="header">Search Content</a></li>
+      <li><a href="./ActorInfo.php">Search Actors</a></li>
+      <li><a href="./MovieSearchPage.php">Search Movies</a></li>
+      <li><a href="./GenSearch.php">Search All</a></li>
+    </ul>
+
+    <div style="margin-left:25%; padding:1px 16px; height:auto;">
+    <div id="banner">
+      <div id="banner-content"><h1>Add Movie/Director Relationship</h1>
+      </div>
+    </div>
+
+    <div id="main-body">
   <body>
     <ul>
       <li><a class="home" href="./index.php">Home</a></li>
@@ -145,6 +209,7 @@
 
 ?>
 
+</div>
 </div>
 </body>
 </html>

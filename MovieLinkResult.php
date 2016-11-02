@@ -1,40 +1,132 @@
 <!DOCTYPE html>
 <html>
-<head>
-<style>
-body {
-    margin: 0;
-}
+  <head>
+    <title>
+      CS143 Movie Database
+    </title>
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: "Arial", sans-serif;
+      }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 25%;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-}
+      ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          width: 25%;
+          background-color: #A9A9A9;
+          position: fixed;
+          height: 100%;
+          overflow: auto;
+      }
 
-li a {
-    display: block;
-    color: #000;
-    padding: 8px 16px;
-    text-decoration: none;
-}
+      div#banner {
+        display: block;
+        padding: 0px 15px;
+        position: fixed;
+        top: 0;
+        left: 25%;
+        width: 100%;
+        background-color: #065790;
+      }
 
-li a.active {
-    background-color: #4CAF50;
-    color: white;
-}
+      div#main-body {
+        padding-top: 95px;
+      }
 
-li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-}
-</style>
-</head>
+      h1 {
+        color: white;
+        padding: 1px 1px;
+      }
+
+      li a {
+          display: block;
+          color: #000;
+          padding: 8px 16px;
+          text-decoration: none;
+          font-family: "Arial", sans-serif;
+      }
+
+      li a.home {
+          padding: 8px 8px;
+      }
+
+      li a.active {
+          background-color: #0080FF;
+          color: black;
+      }
+
+      li a.header {
+          background-color: #000000;
+          color: white;
+          padding: 8px 8px;
+      }
+
+      li a:hover:not(.active, .header) {
+          background-color: #66B3FF;
+          color: black;
+      }
+
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 150px;
+        height: 30px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.02em;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+      }
+
+      tr:hover{background-color:#f5f5f5}
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 130px;
+        height: 28px;
+        font-family: "Arial", sans-serif;
+        font-size: 11px; 
+        font-weight: bold;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+        font-weight: bold;
+      }
+
+      
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li><a class="home" href="./index.php">Home</a></li>
+      <li><a class="header">Add Content</a></li>
+      <li><a href="./test.php">Add New Actor/Director</a></li>
+      <li><a href="./movieInfo.php">Add New Movie</a></li>
+      <li><a class="active" href="./movieActor.php">Add Movie/Actor Relationship</a></li>
+      <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
+      <li><a href="./review.php">Add Review</a></li>
+      <li><a class="header">Search Content</a></li>
+      <li><a href="./ActorInfo.php">Search Actors</a></li>
+      <li><a href="./MovieSearchPage.php">Search Movies</a></li>
+      <li><a href="./GenSearch.php">Search All</a></li>
+    </ul>
+
+    <div style="margin-left:25%; padding:1px 16px; height:auto;">
+    <div id="banner">
+      <div id="banner-content"><h1>Movie Information</h1>
+      </div>
+    </div>
+
+    <div id="main-body">
 <body>
 
 
@@ -92,7 +184,7 @@ li a:hover:not(.active) {
     
     echo "Genre: " . $genre . "<br>";
     echo "<h1> Actors in this movie: </h1>";
-    echo "<table border='1' bordercolor='black' cellpadding='2'>";
+    echo "<table cellpadding='2'>";
     echo "<tr>";
     echo "<th>Actor Name</th>";
     echo "<th>Role</th>";
@@ -140,6 +232,7 @@ li a:hover:not(.active) {
 	<form method="post" action="ActorInfo.php">
         <input type="Submit" value="Go back to make another search!">
     </form>
+</div>
 </div>
 </body>
 

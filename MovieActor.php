@@ -83,6 +83,25 @@
         color: white;
       }
 
+      tr:hover{background-color:#f5f5f5}
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 130px;
+        height: 28px;
+        font-family: "Arial", sans-serif;
+        font-size: 11px; 
+        font-weight: bold;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+        font-weight: bold;
+      }
+
+      
     </style>
   </head>
   <body>
