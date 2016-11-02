@@ -61,5 +61,40 @@
       <li><a href="./MovieSearchPage.php">Search Movies</a></li>
       <li><a href="./GenSearch.php">Search All</a></li>
     </ul>
+
+    <div style="margin-left:25%; padding:1px 16px; height:1000px;">
+      <h1>Welcome to the Svaacker Movie Database!</h1>
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
   </body>
 </html>
