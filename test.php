@@ -45,6 +45,7 @@
           background-color: #66B3FF;
           color: black;
       }
+
     </style>
   </head>
   <body>
@@ -61,7 +62,7 @@
       <li><a href="./MovieSearchPage.php">Search Movies</a></li>
       <li><a href="./GenSearch.php">Search All</a></li>
     </ul>
-    <div style="margin-left:25%; padding:1px 16px; height:1000px;">
+    <div style="margin-left:25%; padding:1px 16px; height:600px;">
 
     <h1>Add New Actor/Director</h1>
 
@@ -71,11 +72,11 @@
       
       <br><br>
 
-      <b>First Name</b> <br> <INPUT TYPE="text" name="firstName" placeholder="e.g., John">
+      <b>First Name</b> <br> <INPUT TYPE="text" name="firstName" size="50" maxlength="20" placeholder="e.g., John">
 
       <br><br>
       
-      <b>Last Name</b> <br> <input type="text" name="lastName" placeholder="e.g., Smith">
+      <b>Last Name</b> <br> <input type="text" name="lastName" size="50" maxlength="20" placeholder="e.g., Smith">
 
       <br><br>
 
@@ -84,25 +85,21 @@
 
       <br><br>
       
-      <b>Date of Birth</b> <br> <input type="text" name="DOB" placeholder="YYYY-MM-DD">
+      <b>Date of Birth</b> <br> <input type="text" name="DOB" size="20" maxlength="10" placeholder="YYYY-MM-DD">
 
       <br><br>
 
-      <b>Date of Death (if applicable)</b> <br> <input type="text" name="DOD" placeholder="YYYY-MM-DD">
+      <b>Date of Death (if applicable)</b> <br> <input type="text" name="DOD" size="20" maxlength="10" placeholder="YYYY-MM-DD">
       
       <br><br>
 
-      <input type="submit" value="Submit">
+      <input type="submit" value="Add Person!">
     </form>
 
     <?php
       if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
 
         $quitError = 0;
-
-        if (empty($_GET)) {
-          $quitError = 1;
-        }
 
         // Check validity of input
         if (!($firstName = $_GET['firstName'])) {
@@ -141,13 +138,13 @@
         }
 
         # TODO: Compare dob to dod
-        if (($quitError == 0) AND (strcmp($dob, $dod) > 0)) {
-          echo "Date of birth cannot be after date of death.";
+        if (($dateError == 0) AND (strcmp($dob, $dod) > 0)) {
+          echo "Date of birth cannot be after date of death";
           $quitError = 1;
           $dateError = 1;
         }
 
-        if(!$quitError){
+        if(!$quitError) {
 
           #where we would want to INSERT
           $database = new mysqli('localhost', 'cs143', '', 'CS143');
@@ -176,8 +173,6 @@
           }
          
           $personStatement->execute();
-          
-          //TODO: make sure INSERT succeeded before updating this value
 
           $id_statement = $database->prepare("UPDATE MaxPersonID SET id = $id;");
           $id_statement->execute();
@@ -190,6 +185,7 @@
         }
       }
     ?>
+    </div>
     </div>
   </body>
 </html>

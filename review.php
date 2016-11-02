@@ -82,19 +82,18 @@
 ?>
 	  <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
      
-      <br>
-      Your Name:
+      <b>Your Name</b>:
       <br>
       <INPUT TYPE="text" name="name" size="20" maxlength="20" placeholder="e.g., John Smith">
       <br><br>
-      Movie 
+      <b>Movie</b><br> 
       <SELECT name="movie">
             <?=$movieList?>
       </SELECT><br><br>
 
 
 
-      Rating:<SELECT NAME="rating">
+      <b>Rating</b><br><SELECT NAME="rating">
       <OPTION SELECTED>Select a Rating
       <OPTION> 0
       <OPTION> 1
@@ -105,10 +104,10 @@
       </SELECT>
       <br><br>
       <b>Comments</b>:<br>
-      <input type="textarea" name="comment" ROWS=10 COLUMNS=100 placeholder="Max 500 characters"><br>
+      <TEXTAREA name="comment" ROWS=7 COLS=72 maxlength="500" placeholder="Max 500 characters"></TEXTAREA><br>
 
       <br>
-      <input type="submit" value="Submit">
+      <input type="submit" value="Add Review!">
    </form>
 <?php
       if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {

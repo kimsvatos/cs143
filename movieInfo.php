@@ -67,11 +67,11 @@
 
 	  <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
      
-      <b>Title</b> <br> <INPUT TYPE="text" name="title" placeholder="e.g., Titanic">
+      <b>Title</b> <br> <INPUT TYPE="text" name="title" size="50" maxlength="100" placeholder="e.g., Titanic">
       
       <br><br>
       
-      <b>Company</b> <br> <input type="text" name="company" placeholder="e.g., 20th Century Fox">
+      <b>Company</b> <br> <input type="text" name="company" size="50" maxlength="50" placeholder="e.g., 20th Century Fox">
       
       <br><br>
       
@@ -117,7 +117,7 @@
  	  
     <br><br>
 
-      <input type="submit" value="Submit">
+      <input type="submit" value="Add Movie!">
    </form>
 
    <?php
