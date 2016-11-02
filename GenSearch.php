@@ -8,6 +8,10 @@
 <?php
 	if ($_SERVER["REQUEST_METHOD"] == "GET"){
 		
+    if (empty($_GET)) {
+      echo "no data given<br>";
+    }
+
 		$name = $_GET['search'];
 		$words = explode(' ', $name);
 		echo "$words[0]<br>";
