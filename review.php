@@ -136,7 +136,7 @@
          
             $rStatement->execute();
 
-            echo "success!";
+            echo "Success!";
         }
       }
 ?>
