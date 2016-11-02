@@ -39,18 +39,25 @@ li a:hover:not(.active) {
 
 
 <ul>
-  <li><a class="active" href="./index.php">Home</a></li>
+  <li><a href="./index.php">Home</a></li>
   <li><a href="./movieInfo.php">Insert a New Actor/Director</a></li>
   <li><a href="./movieInfo.php">Insert a New Movie</a></li>
   <li><a href="./movieActor.php">Add a Movie/Actor relationship!</a></li>
   <li><a href="./movieDirector.php">Add a Movie/Director relationship!</a></li>
   <li><a href="./review.php">Add a Review</a></li>
-  <li><a href="./ActorInfo.php">Actor Lookup</a></li>
+  <li><a class="active" href="./ActorInfo.php">Actor Lookup</a></li>
   <li><a href="./MovieSearchPage.php">Movie Lookup</a></li>
   <li><a href="./GenSearch.php">General Search</a></li>
  
 </ul>
 <div style="margin-left:25%;padding:1px 16px;height:1000px;">
+
+
+
+
+
+
+
 <h1> Actor Information!</h1>
 
 	<form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
@@ -58,12 +65,12 @@ li a:hover:not(.active) {
 		<input type="Submit" value="Search Actors!">
 	</form>
 <?php
-	if ($_SERVER["REQUEST_METHOD"] == "GET"){
+if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
 		
 		$name = $_GET['search'];
 		$words = explode(' ', $name);
-		echo "$words[0]<br>";
-		echo "$words[1]<br>";
+		//echo "$words[0]<br>";
+		//echo "$words[1]<br>";
 		$database = new mysqli('localhost', 'cs143', '', 'CS143');
     	if($database->connect_errno > 0){
    	    	 die('Unable to connect to database [' . $database->connect_error . ']');
@@ -71,7 +78,7 @@ li a:hover:not(.active) {
    		//"kyle haacker"
    		$i=0;
    		$query = "SELECT id, first, last, dob FROM Actor";
-   		echo count($words);
+   		//echo count($words);
    		while($i < count($words)){
    			echo "$words[$i] is in row $i<br>";
    			if($i == 0){

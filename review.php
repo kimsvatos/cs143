@@ -1,7 +1,59 @@
+<!DOCTYPE html>
 <html>
-<title>CS 143 Movie Database</title>
+<head>
+<style>
+body {
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+</style>
+</head>
+<body>
+
+
+<ul>
+  <li><a href="./index.php">Home</a></li>
+  <li><a href="./movieInfo.php">Insert a New Actor/Director</a></li>
+  <li><a href="./movieInfo.php">Insert a New Movie</a></li>
+  <li><a href="./movieActor.php">Add a Movie/Actor relationship!</a></li>
+  <li><a href="./movieDirector.php">Add a Movie/Director relationship!</a></li>
+  <li><a class="active" href="./review.php">Add a Review</a></li>
+  <li><a href="./ActorInfo.php">Actor Lookup</a></li>
+  <li><a href="./MovieSearchPage.php">Movie Lookup</a></li>
+  <li><a href="./GenSearch.php">General Search</a></li>
+ 
+</ul>
+<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+
 	<h1>Review a Movie!</h1>
-	<body>
+
       <?php
       $database = new mysqli('localhost', 'cs143', '', 'CS143');
             if($database->connect_errno > 0){
@@ -49,6 +101,7 @@
       <input type="submit" value="Submit">
    </form>
 <?php
+ if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
       $quitError=0;
       if (!($name = $_GET['name'])) {
           echo "Need a name<br>";
@@ -75,6 +128,7 @@
 
             echo "success!";
         }
+       }
 ?>
 
  	  

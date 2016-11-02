@@ -11,7 +11,7 @@
         die('Unable to connect to database [' . $database->connect_error . ']');
     }
 
-    echo "$id";
+  
     $id_query = "SELECT first, last, dob, sex, dod FROM Actor WHERE id=$id;";
     $queryRes = $database->query($id_query);
     $result = $queryRes->fetch_array(MYSQLI_ASSOC);
@@ -39,9 +39,30 @@
 	echo "</tr>";
 	echo "</table>";
 
-
+	//movie info 
+	$id_query = "SELECT role, title from MovieActor, Movie WHERE aid = $id AND mid=id";
+    $queryRes = $database->query($id_query);
+    
 	///next table
     echo "<h1> Actor's Movies and Role:</h1>";
+
+
+    echo "<table border='1' bordercolor='black' cellpadding='2'>";
+    echo "<tr>";
+    echo "<th>Movie Title</th>";
+    echo "<th>Role</th>";
+   
+    echo "</tr>";
+
+    while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
+    echo "<tr>";
+    echo "<td>" . $result['title'] . "</td>"; //this will link to MOVIElinkResult
+	echo "<td>" . $result['role'] . "</td>";
+	
+	echo "</tr>";
+	}	
+
+	echo "</table>";
    // echo "</table>";
 ?>
 	<form method="post" action="ActorInfo.php">
