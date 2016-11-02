@@ -45,11 +45,11 @@
         echo "<th>Title</th>";
         echo "<th>Year</th>";
         echo "</tr>";
-        echo "hello";
+        //echo "hello";
         //while($rStatement->fetch()){
         $i = 0;
         while($row = $result->fetch_array(MYSQLI_ASSOC)){
-        	echo "$i";
+        
         	$i++;
         ///fix 
         	$title = $row['title'];
@@ -66,9 +66,9 @@
         echo "</table>";
 
         //SECOND SEARCH!! ACTOR!
-/*
+        echo "<br><br><br>";
         $i=0;
-   		$query = "SELECT id, concat(first, " ", last) fullName, dob FROM Actor";
+   		$query = "SELECT id, concat(first, ' ', last) fullName, dob FROM Actor";
    		echo count($words);
    		while($i < count($words)){
    			echo "$words[$i] is in row $i<br>";
@@ -114,7 +114,7 @@
 
 
 
-*/
+
 
 
 
