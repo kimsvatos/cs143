@@ -102,9 +102,9 @@
 		<?=$actorList?>
 	</SELECT><br><br>
 
-	<b>Role</b>:<br>
+	<b>Role</b><br>
 	<input type="text" name="role" size="50" maxlength="50" placeholder="e.g., cop"><br><br>
-	<input type="submit" value="Add Movie/Actor relationship!">
+	<input type="submit" value="Add Relationship!">
 
 
 </form>
@@ -135,9 +135,6 @@
 
 	}
 ?>
-
-
-
 
 </div>
 </body>

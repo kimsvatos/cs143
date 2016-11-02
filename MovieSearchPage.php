@@ -67,7 +67,7 @@
 	  
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
 		<input type="text" size="80" name="search">
-		<input type="Submit" value="Search Actors!">
+		<input type="Submit" value="Search Movies!">
 	  </form>
 
 <?php
