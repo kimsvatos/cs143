@@ -39,7 +39,8 @@ li a:hover:not(.active) {
 
 
 <ul>
-  <li><a class="active" href="./test.php">Insert a New Actor/Director</a></li>
+  <li><a class="active" href="./index.php">Home</a></li>
+  <li><a href="./movieInfo.php">Insert a New Actor/Director</a></li>
   <li><a href="./movieInfo.php">Insert a New Movie</a></li>
   <li><a href="./movieActor.php">Add a Movie/Actor relationship!</a></li>
   <li><a href="./movieDiretor.php">Add a Movie/Director relationship!</a></li>
