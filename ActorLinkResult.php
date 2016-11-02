@@ -80,7 +80,7 @@
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
     echo "<tr>";
     echo "<td> <a href=\"MovieLinkResult.php?id=".$result["id"]."\">".$result['title']."</a></td>";
-    echo "<td> <a href=\"MovieLinkResult.php?id=".$result["id"]."\">".$result['role']."</a></td>";
+    echo "<td>".$result['role']."</a></td>";
 	echo "</tr>";
 	}	
 
@@ -90,7 +90,7 @@
 ?>
 	<form method="post" action="ActorInfo.php">
         <br>
-        <input type="Submit" value="Go back to make another search!">
+        <input type="Submit" value="Search Another Actor!">
     </form>
 </div>
 </div>

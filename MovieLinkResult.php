@@ -87,7 +87,7 @@
 ?>
 	<form method="post" action="ActorInfo.php">
         <br>
-        <input type="Submit" value="Go back to make another search!">
+        <input type="Submit" value="Search Another Movie!">
     </form>
 </div>
 </div>
