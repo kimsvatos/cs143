@@ -65,13 +65,13 @@ tr:hover{background-color:#f5f5f5}
         width: 130px;
         height: 28px;
         font-family: "Arial", sans-serif;
-        font-size: 1.02em;
+        font-size: 11px; 
       }
 
       input[type=submit]:hover {
         background: #66B3FF;
         color: white;
-        font-weight:bold;
+        font-weight: bold;
       }
 
     </style>
