@@ -6,7 +6,10 @@
     <style>
       body {
           margin: 0;
+          padding: 0;
+          font-family: "Arial", sans-serif;
       }
+
       ul {
           list-style-type: none;
           margin: 0;
@@ -16,6 +19,25 @@
           position: fixed;
           height: 100%;
           overflow: auto;
+      }
+
+      div#banner {
+        display: block;
+        padding: 0px 15px;
+        position: fixed;
+        top: 0;
+        left: 25%;
+        width: 100%;
+        background-color: #065790;
+      }
+
+      div#main-body {
+        padding-top: 95px;
+      }
+
+      h1 {
+        color: white;
+        padding: 1px 1px;
       }
 
       li a {
@@ -77,12 +99,16 @@
       <li><a href="./MovieSearchPage.php">Search Movies</a></li>
       <li><a href="./GenSearch.php">Search All</a></li>
     </ul>
-    <div style="margin-left:25%; padding:1px 16px; height:1000px;">
 
-    <h1>Add Movie/Actor Relationship</h1>
+    <div style="margin-left:25%; padding:1px 16px; height:auto;">
+    <div id="banner">
+      <div id="banner-content"><h1>Add Movie/Actor Relationship</h1>
+      </div>
+    </div>
 
-  <?php
-	$database = new mysqli('localhost', 'cs143', '', 'CS143');
+    <div id="main-body">
+    <?php
+      $database = new mysqli('localhost', 'cs143', '', 'CS143');
     if($database->connect_errno > 0){
         die('Unable to connect to database [' . $database->connect_error . ']');
     }
@@ -90,10 +116,10 @@
     $movieList = "";
     $movieList = $movieList . "<option SELECTED value=\"-1\"> Select Movie </option>";
     while($row = $movieQuery->fetch_array(MYSQLI_ASSOC)){
-    	$id = $row["id"];
-    	$title = $row["title"];
-     	$year = $row["year"];
-    	$movieList = $movieList . "<option value=\"$id\"> $title ($year) </option>";
+      $id = $row["id"];
+      $title = $row["title"];
+      $year = $row["year"];
+      $movieList = $movieList . "<option value=\"$id\"> $title ($year) </option>";
 
     }
 
@@ -101,59 +127,60 @@
     $actorList = "";
     $actorList = $actorList . "<option value=\"-1\"> Select Actor</option>";
     while($row = $actorQuery->fetch_array(MYSQLI_ASSOC)){
-    	$last = $row["last"];
-    	$id = $row["id"];
-    	$first = $row["first"];
-     	$dob = $row["dob"];
-    	$actorList = $actorList . "<option value=\"$id\"> $first $last ($dob)</option>";
+      $last = $row["last"];
+      $id = $row["id"];
+      $first = $row["first"];
+      $dob = $row["dob"];
+      $actorList = $actorList . "<option value=\"$id\"> $first $last ($dob)</option>";
 
     }
 
 ?>
 <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
-	<b>Movie</b><br>
+  <b>Movie</b><br>
   <SELECT name="movie">
-		<?=$movieList?>
-	</SELECT><br><br>
+    <?=$movieList?>
+  </SELECT><br><br>
   <b>Actor</b><br>
-	<SELECT name="actor">
-		<?=$actorList?>
-	</SELECT><br><br>
+  <SELECT name="actor">
+    <?=$actorList?>
+  </SELECT><br><br>
 
-	<b>Role</b><br>
-	<input type="text" name="role" size="50" maxlength="50" placeholder="e.g., cop"><br><br>
-	<input type="submit" value="Add Relationship!">
+  <b>Role</b><br>
+  <input type="text" name="role" size="50" maxlength="50" placeholder="e.g., cop"><br><br>
+  <input type="submit" value="Add Relationship!">
 
 
 </form>
 <?php
-	if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
+  if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
 
-	$quitError = 0;
-	if(($movieID = $_GET['movie'] ) == "-1"){
-		echo "Must select a movie!<br>";
-		$quitError = 1;
-	}
-	if(($actorID = $_GET['actor'] ) == "-1"){
-		echo "Must select an actor!<br>";
-		$quitError = 1;
-	}
-	if(!($role = $_GET['role'])){
-		echo "Must specify a role!<br>";
-		$quitError = 1;
-	}
+  $quitError = 0;
+  if(($movieID = $_GET['movie'] ) == "-1"){
+    echo "Must select a movie!<br>";
+    $quitError = 1;
+  }
+  if(($actorID = $_GET['actor'] ) == "-1"){
+    echo "Must select an actor!<br>";
+    $quitError = 1;
+  }
+  if(!($role = $_GET['role'])){
+    echo "Must specify a role!<br>";
+    $quitError = 1;
+  }
 
-	if(!$quitError){
-		//do stuff we like
-		$statement = $database->prepare("INSERT INTO MovieActor (mid, aid, role) VALUES (?, ?, ?);");
+  if(!$quitError){
+    //do stuff we like
+    $statement = $database->prepare("INSERT INTO MovieActor (mid, aid, role) VALUES (?, ?, ?);");
         $statement->bind_param("iis", $movieID, $actorID, $role);
         $statement->execute();
         echo "Success!";
-	}
+  }
 
-	}
+  }
 ?>
 
+</div>
 </div>
 </body>
 </html>

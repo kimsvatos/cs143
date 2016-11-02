@@ -66,6 +66,7 @@ tr:hover{background-color:#f5f5f5}
         height: 28px;
         font-family: "Arial", sans-serif;
         font-size: 11px; 
+        font-weight: bold;
       }
 
       input[type=submit]:hover {
