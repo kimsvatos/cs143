@@ -141,9 +141,9 @@ tr:hover{background-color:#f5f5f5}
         	$year = $row['year'];
         	$id = $row['id'];
         	
-        	echo "<tr>";
-        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\">".$title."</a></td>";
-        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\">".$year."</a> </td>";
+        	echo "<tr>";     
+        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\"  style=\"color: #fb3f00; text-decoration: none;\">".$title."</a></td>";
+        	echo "<td> <a href=\"MovieLinkResult.php?id=".$row["id"]."\"  style=\"color: #fb3f00; text-decoration: none;\">".$year."</a> </td>";
         	echo "</tr>";
         }
         echo "</table>";
