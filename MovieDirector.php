@@ -1,59 +1,71 @@
-<!DOCTYPE html>
 <html>
-<head>
-<style>
-body {
-    margin: 0;
-}
+  <head>
+    <title>
+      CS143 Movie Database
+    </title>
+    <style>
+      body {
+          margin: 0;
+      }
+      ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          width: 25%;
+          background-color: #A9A9A9;
+          position: fixed;
+          height: 100%;
+          overflow: auto;
+      }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 25%;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-}
+      li a {
+          display: block;
+          color: #000;
+          padding: 8px 16px;
+          text-decoration: none;
+          font-family: "Arial", sans-serif;
+      }
 
-li a {
-    display: block;
-    color: #000;
-    padding: 8px 16px;
-    text-decoration: none;
-}
+      li a.home {
+          padding: 8px 8px;
+      }
 
-li a.active {
-    background-color: #4CAF50;
-    color: white;
-}
+      li a.active {
+          background-color: #0080FF;
+          color: black;
+      }
 
-li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-}
-</style>
-</head>
-<body>
+      li a.header {
+          background-color: #000000;
+          color: white;
+          padding: 8px 8px;
+      }
 
+      li a:hover:not(.active, .header) {
+          background-color: #66B3FF;
+          color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li><a class="home" href="./index.php">Home</a></li>
+      <li><a class="header">Add Content</a></li>
+      <li><a href="./test.php">Add New Actor/Director</a></li>
+      <li><a href="./movieInfo.php">Add New Movie</a></li>
+      <li><a href="./movieActor.php">Add Movie/Actor Relationship</a></li>
+      <li><a class="active" href="./movieDirector.php">Add Movie/Director Relationship</a></li>
+      <li><a href="./review.php">Add Review</a></li>
+      <li><a class="header">Search Content</a></li>
+      <li><a href="./ActorInfo.php">Search Actors</a></li>
+      <li><a href="./MovieSearchPage.php">Search Movies</a></li>
+      <li><a href="./GenSearch.php">Search All</a></li>
+    </ul>
+    <div style="margin-left:25%; padding:1px 16px; height:1000px;">
 
-<ul>
-  <li><a href="./index.php">Home</a></li>
-  <li><a href="./movieInfo.php">Insert a New Actor/Director</a></li>
-  <li><a href="./movieInfo.php">Insert a New Movie</a></li>
-  <li><a href="./movieActor.php">Add a Movie/Actor relationship!</a></li>
-  <li><a class="active" href="./movieDirector.php">Add a Movie/Director relationship!</a></li>
-  <li><a href="./review.php">Add a Review</a></li>
-  <li><a href="./ActorInfo.php">Actor Lookup</a></li>
-  <li><a href="./MovieSearchPage.php">Movie Lookup</a></li>
-  <li><a href="./GenSearch.php">General Search</a></li>
- 
-</ul>
-<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+    <h1>Add Movie/Director Relationship</h1>
 
 <?php
-if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
 	$database = new mysqli('localhost', 'cs143', '', 'CS143');
     if($database->connect_errno > 0){
         die('Unable to connect to database [' . $database->connect_error . ']');
@@ -82,19 +94,18 @@ if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
     }
 
 ?>
-<h1> omg lets try it </h1>
 <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
 	<SELECT name="movie">
 		<?=$movieList?>
 	</SELECT>
 	<SELECT name="director">
 		<?=$directorList?>
-	</SELECT><br>
+	</SELECT><br><br>
 		<input type="submit" value="Add Movie/Director relationship!">
 
 </form>
 <?php
-    if ($_SERVER["REQUEST_METHOD"] == "GET"){
+    if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
 	$quitError = 0;
 	if(($movieID = $_GET['movie'] ) == "-1"){
 		echo "Must select a movie!<br>";
@@ -114,7 +125,7 @@ if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
         echo "success!";
 	}
 }
-}
+
 ?>
 
 </div>
