@@ -1,58 +1,69 @@
-<!DOCTYPE html>
 <html>
-<head>
-<style>
-body {
-    margin: 0;
-}
+  <head>
+    <title>
+      CS143 Movie Database
+    </title>
+    <style>
+      body {
+          margin: 0;
+      }
+      ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          width: 25%;
+          background-color: #A9A9A9;
+          position: fixed;
+          height: 100%;
+          overflow: auto;
+      }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 25%;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-}
+      li a {
+          display: block;
+          color: #000;
+          padding: 8px 16px;
+          text-decoration: none;
+          font-family: "Arial", sans-serif;
+      }
 
-li a {
-    display: block;
-    color: #000;
-    padding: 8px 16px;
-    text-decoration: none;
-}
+      li a.home {
+          padding: 8px 8px;
+      }
 
-li a.active {
-    background-color: #4CAF50;
-    color: white;
-}
+      li a.active {
+          background-color: #0080FF;
+          color: black;
+      }
 
-li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-}
-</style>
-</head>
-<body>
+      li a.header {
+          background-color: #000000;
+          color: white;
+          padding: 8px 8px;
+      }
 
+      li a:hover:not(.active, .header) {
+          background-color: #66B3FF;
+          color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li><a class="home" href="./index.php">Home</a></li>
+      <li><a class="header">Add Content</a></li>
+      <li><a href="./test.php">Add New Actor/Director</a></li>
+      <li><a href="./movieInfo.php">Add New Movie</a></li>
+      <li><a href="./movieActor.php">Add Movie/Actor Relationship</a></li>
+      <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
+      <li><a class="active" href="./review.php">Add Review</a></li>
+      <li><a class="header">Search Content</a></li>
+      <li><a href="./ActorInfo.php">Search Actors</a></li>
+      <li><a href="./MovieSearchPage.php">Search Movies</a></li>
+      <li><a href="./GenSearch.php">Search All</a></li>
+    </ul>
+    <div style="margin-left:25%; padding:1px 16px; height:1000px;">
 
-<ul>
-  <li><a href="./index.php">Home</a></li>
-  <li><a href="./movieInfo.php">Insert a New Actor/Director</a></li>
-  <li><a href="./movieInfo.php">Insert a New Movie</a></li>
-  <li><a href="./movieActor.php">Add a Movie/Actor relationship!</a></li>
-  <li><a href="./movieDirector.php">Add a Movie/Director relationship!</a></li>
-  <li><a class="active" href="./review.php">Add a Review</a></li>
-  <li><a href="./ActorInfo.php">Actor Lookup</a></li>
-  <li><a href="./MovieSearchPage.php">Movie Lookup</a></li>
-  <li><a href="./GenSearch.php">General Search</a></li>
- 
-</ul>
-<div style="margin-left:25%;padding:1px 16px;height:1000px;">
-
-	<h1>Review a Movie!</h1>
+    <h1>Add Review</h1>
 
       <?php
       $database = new mysqli('localhost', 'cs143', '', 'CS143');
@@ -74,7 +85,7 @@ li a:hover:not(.active) {
       <br>
       Your Name:
       <br>
-      <INPUT TYPE="text" name="name" size="20" maxlength="20">
+      <INPUT TYPE="text" name="name" size="20" maxlength="20" placeholder="e.g., John Smith">
       <br><br>
       Movie 
       <SELECT name="movie">
@@ -92,16 +103,15 @@ li a:hover:not(.active) {
       <OPTION> 4
       <OPTION> 5
       </SELECT>
-      <br><br><br>
-      <h4>Comments:</h4>
-      <input type="textarea" name="comment" ROWS=10 COLUMNS=60><br>
-      Must be 500 characters or less. 
-      <br>
+      <br><br>
+      <b>Comments</b>:<br>
+      <input type="textarea" name="comment" ROWS=10 COLUMNS=100 placeholder="Max 500 characters"><br>
+
       <br>
       <input type="submit" value="Submit">
    </form>
 <?php
- if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
+      if (($_SERVER["REQUEST_METHOD"] == "GET") and (!empty($_GET))) {
       $quitError=0;
       if (!($name = $_GET['name'])) {
           echo "Need a name<br>";
@@ -128,16 +138,11 @@ li a:hover:not(.active) {
 
             echo "success!";
         }
-       }
+      }
 ?>
 
  	  
 
-
-
+    </div>
 	</body>
-
-
-
-
 </html>

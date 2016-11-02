@@ -54,7 +54,7 @@
       <li><a class="active" href="./test.php">Add New Actor/Director</a></li>
       <li><a href="./movieInfo.php">Add New Movie</a></li>
       <li><a href="./movieActor.php">Add Movie/Actor Relationship</a></li>
-      <li><a href="./movieDiretor.php">Add Movie/Director Relationship</a></li>
+      <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
       <li><a href="./review.php">Add Review</a></li>
       <li><a class="header">Search Content</a></li>
       <li><a href="./ActorInfo.php">Search Actors</a></li>
