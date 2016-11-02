@@ -110,12 +110,12 @@
       <li><a class="header">Add Content</a></li>
       <li><a href="./test.php">Add New Actor/Director</a></li>
       <li><a href="./movieInfo.php">Add New Movie</a></li>
-      <li><a class="active" href="./movieActor.php">Add Movie/Actor Relationship</a></li>
+      <li><a href="./movieActor.php">Add Movie/Actor Relationship</a></li>
       <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
       <li><a href="./review.php">Add Review</a></li>
       <li><a class="header">Search Content</a></li>
       <li><a href="./ActorInfo.php">Search Actors</a></li>
-      <li><a href="./MovieSearchPage.php">Search Movies</a></li>
+      <li><a class="active" href="./MovieSearchPage.php">Search Movies</a></li>
       <li><a href="./GenSearch.php">Search All</a></li>
     </ul>
 
@@ -126,23 +126,9 @@
     </div>
 
     <div id="main-body">
-  <body>
-    <ul>
-      <li><a class="home" href="./index.php">Home</a></li>
-      <li><a class="header">Add Content</a></li>
-      <li><a href="./test.php">Add New Actor/Director</a></li>
-      <li><a href="./movieInfo.php">Add New Movie</a></li>
-      <li><a href="./movieActor.php">Add Movie/Actor Relationship</a></li>
-      <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
-      <li><a href="./review.php">Add Review</a></li>
-      <li><a class="header">Search Content</a></li>
-      <li><a href="./ActorInfo.php">Search Actors</a></li>
-      <li><a class="active" href="./MovieSearchPage.php">Search Movies</a></li>
-      <li><a href="./GenSearch.php">Search All</a></li>
-    </ul>
-    <div style="margin-left:25%; padding:1px 16px; height:1000px;">
+  
 
-    <h1>Search Movies</h1>
+   
 	  
     <form method="get" action="<?php echo $_SERVER['PHP_SELF'];?>">
 		<input type="text" size="80" maxlength="200" name="search" placeholder="Max 200 characters"><br><br>

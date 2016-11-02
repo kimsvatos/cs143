@@ -111,7 +111,7 @@
       <li><a class="header">Add Content</a></li>
       <li><a href="./test.php">Add New Actor/Director</a></li>
       <li><a href="./movieInfo.php">Add New Movie</a></li>
-      <li><a class="active" href="./movieActor.php">Add Movie/Actor Relationship</a></li>
+      <li><a href="./movieActor.php">Add Movie/Actor Relationship</a></li>
       <li><a href="./movieDirector.php">Add Movie/Director Relationship</a></li>
       <li><a href="./review.php">Add Review</a></li>
       <li><a class="header">Search Content</a></li>
@@ -127,22 +127,9 @@
     </div>
 
     <div id="main-body">
-<body>
 
 
-<ul>
-  <li><a href="./index.php">Home</a></li>
-  <li><a href="./movieInfo.php">Insert a New Actor/Director</a></li>
-  <li><a href="./movieInfo.php">Insert a New Movie</a></li>
-  <li><a href="./movieActor.php">Add a Movie/Actor relationship!</a></li>
-  <li><a href="./movieDirector.php">Add a Movie/Director relationship!</a></li>
-  <li><a href="./review.php">Add a Review</a></li>
-  <li><a href="./ActorInfo.php">Actor Lookup</a></li>
-  <li><a href="./MovieSearchPage.php">Movie Lookup</a></li>
-  <li><a href="./GenSearch.php">General Search</a></li>
- 
-</ul>
-<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+
 
 
 
