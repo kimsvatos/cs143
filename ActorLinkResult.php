@@ -98,8 +98,6 @@ li a:hover:not(.active) {
     
 	///next table
     echo "<h1> Actor's Movies and Role:</h1>";
-
-
     echo "<table border='1' bordercolor='black' cellpadding='2'>";
     echo "<tr>";
     echo "<th>Movie Title</th>";
@@ -110,15 +108,12 @@ li a:hover:not(.active) {
     while($result = $queryRes->fetch_array(MYSQLI_ASSOC)){
     echo "<tr>";
     echo "<td> <a href=\"MovieLinkResult.php?id=".$result["id"]."\">".$result['title']."</a></td>";
-    //echo "<td>" . $result['title'] . "</td>"; //this will link to MOVIElinkResult
     echo "<td> <a href=\"MovieLinkResult.php?id=".$result["id"]."\">".$result['role']."</a></td>";
-	//echo "<td>" . $result['role'] . "</td>";
-	
 	echo "</tr>";
 	}	
 
 	echo "</table>";
-   // echo "</table>";
+
 //}
 ?>
 	<form method="post" action="ActorInfo.php">

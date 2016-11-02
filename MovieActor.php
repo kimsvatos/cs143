@@ -130,7 +130,7 @@
 		$statement = $database->prepare("INSERT INTO MovieActor (mid, aid, role) VALUES (?, ?, ?);");
         $statement->bind_param("iis", $movieID, $actorID, $role);
         $statement->execute();
-        echo "success!";
+        echo "Success!";
 	}
 
 	}

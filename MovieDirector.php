@@ -122,7 +122,7 @@
 		$statement = $database->prepare("INSERT INTO MovieDirector (mid, did) VALUES (?, ?);");
         $statement->bind_param("ii", $movieID, $dID);
         $statement->execute();
-        echo "success!";
+        echo "Success!";
 	}
 }
 

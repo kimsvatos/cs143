@@ -74,8 +74,7 @@
 		
 		$name = $_GET['search'];
 		$words = explode(' ', $name);
-		echo "$words[0]<br>";
-		echo "$words[1]<br>";
+		
 		$database = new mysqli('localhost', 'cs143', '', 'CS143');
     	if($database->connect_errno > 0){
    	    	 die('Unable to connect to database [' . $database->connect_error . ']');
