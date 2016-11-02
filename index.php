@@ -31,6 +31,9 @@
          <form method="post" action="MovieSearchPage.php">
            <input type="Submit" value="look up stuff about MOVIES!">
       </form>
+      <form method="post" action="GenSearchPage.php">
+           <input type="Submit" value="Make a general serach!">
+      </form>
 
 	</body>
 
