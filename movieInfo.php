@@ -45,6 +45,22 @@
           background-color: #66B3FF;
           color: black;
       }
+
+      input[type=submit] {
+        background: #CCCCCC;
+        border: 1px solid #000000;
+        border-radius: 25px;
+        width: 120px;
+        height: 24px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.05em;
+      }
+
+      input[type=submit]:hover {
+        background: #66B3FF;
+        color: white;
+      }
+
     </style>
   </head>
 	<body>
