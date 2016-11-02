@@ -45,6 +45,18 @@
           background-color: #66B3FF;
           color: black;
       }
+      table {
+          border-collapse: collapse;
+           width: 100%;
+      }
+
+      th, td {
+        padding: 8px;
+        text-align: left;
+         border-bottom: 1px solid #ddd;
+        }
+
+tr:hover{background-color:#f5f5f5}
     </style>
   </head>
   <body>
@@ -97,7 +109,7 @@
         $query = $query . ";";
     	  $result = $database->query($query);
 
-        echo "<table border='1' bordercolor='black' cellpadding='2'>";
+        echo "<table>";
         echo "<tr>";
         echo "<th>Title</th>";
         echo "<th>Year</th>";
