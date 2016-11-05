@@ -132,12 +132,42 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
 RC SqlEngine::load(const string& table, const string& loadfile, bool index)
 {
-  /* your code here */
-  RecordFile rf;
-  RC rc;
+  ifstream loadFile(loadfile.c_str());
+  string line;
+  int key;
+  string value;
 
+  RecordFile tableFile;
+  RecordId   tableRecord;
+  RC ret;
+  if ((ret = tableFile.open(table + ".tbl", 'w')) < 0) {
+    fprintf(stderr, "Error creating table '%s' during LOAD\n", table.c_str());
+    return ret;
+  }
 
+  if (loadFile.is_open()) {
+    while (getline(loadFile, line)) {
+      if ((ret = parseLoadLine(line, key, value)) < 0) {
+	fprintf(stderr, "Error parsing line from load file '%s'", loadfile.c_str());
+	return ret;
+      }
+      
+      if ((ret = tableFile.append(key, value, tableRecord)) < 0) {
+	fprintf(stderr, "Error adding tuple with key '%i', value '%s' into table '%s'\n", key, value.c_str(), table.c_str());
+      }
+    }
+  }
+  else {
+    fprintf(stderr, "Error opening load file '%s'", loadfile.c_str());
+  }
 
+  if (index) {
+    // TODO (later part): Create index on key column of table
+    ;
+  }
+
+  loadFile.close();
+  tableFile.close();
 
   return 0;
 }
