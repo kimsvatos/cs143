@@ -29,7 +29,9 @@ RC BTLeafNode::write(PageId pid, PageFile& pf)
  * @return the number of keys in the node
  */
 int BTLeafNode::getKeyCount()
-{ return 0; }
+{ 
+	return m_nKeys; 
+}
 
 /*
  * Insert a (key, rid) pair to the node.
@@ -38,7 +40,15 @@ int BTLeafNode::getKeyCount()
  * @return 0 if successful. Return an error code if the node is full.
  */
 RC BTLeafNode::insert(int key, const RecordId& rid)
-{ return 0; }
+{ 
+	//actually insert it TODO
+
+
+	//update m_nKeys;
+	m_nKeys++;
+
+	return 0; 
+}
 
 /*
  * Insert the (key, rid) pair to the node
@@ -52,7 +62,15 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
  */
 RC BTLeafNode::insertAndSplit(int key, const RecordId& rid, 
                               BTLeafNode& sibling, int& siblingKey)
-{ return 0; }
+{ 
+	///do the thing HERE TODO
+
+
+	// update m_nKeys, we will call insert twice which will account for two 
+	// new nodes, so remove one from count for split
+	m_nKeys--;
+
+	return 0; }
 
 /**
  * If searchKey exists in the node, set eid to the index entry
