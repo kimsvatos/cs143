@@ -126,6 +126,14 @@ class BTLeafNode {
  */
 class BTNonLeafNode {
   public:
+
+   /**
+    * Constructor for BTNonLeafNode class
+    * On success, member variables 'buffer' and 'm_nKeys' are initialized.
+    * @return none
+    */
+    BTNonLeafNode();
+
    /**
     * Insert a (key, pid) pair to the node.
     * Remember that all keys inside a B+tree node should be kept sorted.

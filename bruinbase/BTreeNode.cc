@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+#include <cstring>
 #include "BTreeNode.h"
 
 using namespace std;
@@ -72,7 +76,8 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 	 * not full and thus can simply insert the entry into the last spot in the node
 	 * (starting at index 1008 in the buffer).
 	 */
-	for (int i = 0; i <= 1007; i += entrySize) {
+	int i;
+	for (i = 0; i <= 1007; i += entrySize) {
 
 		int currentKey;
 		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
@@ -102,7 +107,8 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 	memcpy(newBuff + i + entrySize, buffer + i, m_nKeys * entrySize - i);
 
 	/* End the last 4 bytes of the buffer / page with pid pointing to the next neighbor node  */
-	memcpy(newBuff + PageFile::PAGE_SIZE - sizeof(PageId), &(getNextNodePtr()), sizeof(PageId));
+	PageId nextNode = getNextNodePtr();
+	memcpy(newBuff + PageFile::PAGE_SIZE - sizeof(PageId), &nextNode, sizeof(PageId));
 
 	/* Copy the new node contents into the 'buffer' member variable to update node  */
 	memcpy(buffer, newBuff, PageFile::PAGE_SIZE);
@@ -198,7 +204,7 @@ PageId BTLeafNode::getNextNodePtr()
 	memcpy(&ret_pid, buffer + offset, sizeof(PageId));
 
 	//debugging statement poentially
-	fprintf(stdout, "nextNodePtr: %i \n", ret_pid);
+	//fprintf(stdout, "nextNodePtr: %i \n", ret_pid);
 
 	return ret_pid; 
 }
@@ -232,7 +238,7 @@ RC BTLeafNode::setNextNodePtr(PageId pid)
 BTNonLeafNode::BTNonLeafNode()
 {
 	m_nKeys = 0;
-	memset(buffer, 0, PageFile::PAGE_SIZE);
+	//memset(buffer, 0, PageFile::PAGE_SIZE);
 }
 
 /*
