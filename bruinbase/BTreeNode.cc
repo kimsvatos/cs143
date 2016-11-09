@@ -56,7 +56,7 @@ int BTLeafNode::getKeyCount()
  */
 RC BTLeafNode::insert(int key, const RecordId& rid)
 { 
-	//actually insert it TODO
+	/* Entry consists of a key and RecordId  */
 	int entrySize = sizeof(int) + sizeof(RecordId);
 
 	//total page size (except last pointer) divided by size of pair
@@ -157,18 +157,30 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
  */
 RC BTLeafNode::locate(int searchKey, int& eid)
 { 
+	/* Entry consists of a key and RecordId  */
 	int entrySize = sizeof(int) + sizeof(RecordId);
-	int i; 
-	for(i = 0; i < m_nKeys; i++){
+
+	/* Search for an entry with key matching searchKey. If none found,
+	   set eid to entry after entry with largest key smaller than searchKey.  */
+	int i;
+	int matchFound = 0;
+
+	for(i = 0; i < m_nKeys; i++) {
 		int currentKey;
 		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
-		if(currentKey >= searchKey){
+
+		if (currentKey == searchKey) {
+			matchFound = 1;
+			break;
+		}
+
+		if (currentKey > searchKey) {
 			break;
 		}
 	}
-
     eid = i;
-	return 0; 
+	
+	return (matchFound == 1) ? 0 : RC_NO_SUCH_RECORD; 
 }
 
 /*
