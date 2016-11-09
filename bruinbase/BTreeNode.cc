@@ -10,7 +10,7 @@ using namespace std;
 BTLeafNode::BTLeafNode()
 {
 	m_nKeys = 0;
-	memset(buffer, 0, PageFile::PAGE_SIZE);
+	//memset(buffer, 0, PageFile::PAGE_SIZE);
 }
 
 /*
@@ -53,9 +53,62 @@ int BTLeafNode::getKeyCount()
 RC BTLeafNode::insert(int key, const RecordId& rid)
 { 
 	//actually insert it TODO
+	int entrySize = sizeof(int) + sizeof(RecordId);
 
+	//total page size (except last pointer) divided by size of pair
+	int totalEntries = (PageFile::PAGE_SIZE - sizeof(PageId))/entrySize;
 
-	//update m_nKeys;
+	
+	/* RecordId = size 8, key is size 4, so 12 bytes per entry
+	 * 1020 bytes per page / 12 bytes per entry (we disregard last 4 bytes for pid) 
+	 * = totalEntries
+	*/
+	if(getKeyCount() >= totalEntries)
+		return RC_NODE_FULL;
+
+	/* Loop through all entries in the buffer, searching for the first entry with 
+	 * a key value that is greater than the key value of the entry to insert. If
+	 * we search through the first 84 entries in the node, we know that the node is
+	 * not full and thus can simply insert the entry into the last spot in the node
+	 * (starting at index 1008 in the buffer).
+	 */
+	for (int i = 0; i <= 1007; i += entrySize) {
+
+		int currentKey;
+		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
+
+		if (i >= m_nKeys)  /* The next entry is empty, we can insert here  */
+			break;
+
+		if (key <= currentKey)  /* Key being inserted is <= key in current entry  */
+			break;
+	}
+
+	/* Create new buffer / page that we will eventually write out as updated node  */
+	char* newBuff = (char*) malloc (PageFile::PAGE_SIZE);
+	if (newBuff == NULL) {
+		fprintf(stderr, "Error updating node with new insertion\n");
+	}
+	//memset(newBuff, 0, PageFile::PAGE_SIZE);
+
+	/* Copy all entries up to i (i.e., the pre-existing nodes) into new buffer  */
+	memcpy(newBuff, buffer, i);
+
+	/* Copy the new entry, starting at position i  */
+	memcpy(newBuff + i, &key, sizeof(int));
+	memcpy(newBuff + i + sizeof(int), &rid, sizeof(RecordId));
+
+	/* Copy all entries (if any) that come after the newly inserted entry  */
+	memcpy(newBuff + i + entrySize, buffer + i, m_nKeys * entrySize - i);
+
+	/* End the last 4 bytes of the buffer / page with pid pointing to the next neighbor node  */
+	memcpy(newBuff + PageFile::PAGE_SIZE - sizeof(PageId), &(getNextNodePtr()), sizeof(PageId));
+
+	/* Copy the new node contents into the 'buffer' member variable to update node  */
+	memcpy(buffer, newBuff, PageFile::PAGE_SIZE);
+	free(newBuff);
+
+	/* Update m_nKeys to reflect successful insertion of entry to leaf node  */
 	m_nKeys++;
 
 	return 0; 
@@ -81,7 +134,9 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 	// new nodes, so remove one from count for split
 	m_nKeys--;
 
-	return 0; }
+	return 0; 
+
+}
 
 /**
  * If searchKey exists in the node, set eid to the index entry
@@ -95,7 +150,11 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
  * @return 0 if searchKey is found. Otherwise return an error code.
  */
 RC BTLeafNode::locate(int searchKey, int& eid)
-{ return 0; }
+{ 
+
+
+	return 0; 
+}
 
 /*
  * Read the (key, rid) pair from the eid entry.
@@ -135,10 +194,12 @@ PageId BTLeafNode::getNextNodePtr()
 
 	//nodeptr is just pid, return next page id
 	PageId ret_pid; 
-	char* holder = buffer; 
-	memcpy(&ret_pid, holder + (PageFile::PAGE_SIZE) - sizeof(PageId), sizeof(PageId));
+	int offset = (PageFile::PAGE_SIZE) - sizeof(PageId);
+	memcpy(&ret_pid, buffer + offset, sizeof(PageId));
 
+	//debugging statement poentially
 	fprintf(stdout, "nextNodePtr: %i \n", ret_pid);
+
 	return ret_pid; 
 }
 
@@ -148,7 +209,16 @@ PageId BTLeafNode::getNextNodePtr()
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTLeafNode::setNextNodePtr(PageId pid)
-{ return 0; }
+{ 
+	if (pid < 0) // not possible
+		return RC_INVALID_PID; 
+
+	int offset = PageFile::PAGE_SIZE - sizeof(PageId);
+	memcpy(buffer + offset, &pid, sizeof(PageId));
+
+	return 0; 
+
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -157,6 +227,14 @@ RC BTLeafNode::setNextNodePtr(PageId pid)
 //
 //
 //////////////////////////////////////////////////////////////////////////////////////////
+
+
+BTNonLeafNode::BTNonLeafNode()
+{
+	m_nKeys = 0;
+	memset(buffer, 0, PageFile::PAGE_SIZE);
+}
+
 /*
  * Read the content of the node from the page pid in the PageFile pf.
  * @param pid[IN] the PageId to read
