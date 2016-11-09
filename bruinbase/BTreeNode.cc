@@ -101,7 +101,17 @@ RC BTLeafNode::readEntry(int eid, int& key, RecordId& rid)
  * @return the PageId of the next sibling node 
  */
 PageId BTLeafNode::getNextNodePtr()
-{ return 0; }
+{ 
+	//get last PageID, copy to return value
+
+	//nodeptr is just pid, return next pid. 
+	PageId ret_pid; 
+	char* holder = buffer; 
+	memcpy(&ret_pid, holder + (PageFile::PAGE_SIZE) - sizeof(PageId), sizeof(PageId));
+
+	fprintf(stdout, "nextNodePtr: %i \n", ret_pid);
+	return ret_pid; 
+}
 
 /*
  * Set the pid of the next slibling node.
@@ -149,7 +159,15 @@ int BTNonLeafNode::getKeyCount()
  * @return 0 if successful. Return an error code if the node is full.
  */
 RC BTNonLeafNode::insert(int key, PageId pid)
-{ return 0; }
+{ 
+
+	//TODO actual insert
+
+
+	//update m_nKeys
+	m_nKeys++;
+	return 0; 
+}
 
 /*
  * Insert the (key, pid) pair to the node
@@ -162,7 +180,15 @@ RC BTNonLeafNode::insert(int key, PageId pid)
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, int& midKey)
-{ return 0; }
+{ 
+	//TO DO actual split, call insert twice
+
+
+	//update num keys bc we call insert twice
+	m_nKeys--;
+
+	return 0; 
+}
 
 /*
  * Given the searchKey, find the child-node pointer to follow and
