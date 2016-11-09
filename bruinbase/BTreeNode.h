@@ -18,6 +18,14 @@
  */
 class BTLeafNode {
   public:
+
+   /**
+    * Constructor for BTLeafNode class
+    * On success, member variables 'buffer' and 'm_nKeys' are initialized.
+    * @return none
+    */
+    BTLeafNode();
+
    /**
     * Insert the (key, rid) pair to the node.
     * Remember that all keys inside a B+tree node should be kept sorted.
@@ -104,6 +112,12 @@ class BTLeafNode {
     * that contains the node.
     */
     char buffer[PageFile::PAGE_SIZE];
+
+   /**
+    * The number of keys currently stored in the node.
+    * Makes 'getKeyCount' trivial.
+    */
+    int m_nKeys;
 }; 
 
 
@@ -182,6 +196,12 @@ class BTNonLeafNode {
     * that contains the node.
     */
     char buffer[PageFile::PAGE_SIZE];
+
+   /**
+    * The number of keys currently stored in the node.
+    * Makes 'getKeyCount' trivial.
+    */
+    int m_nKeys;
 }; 
 
 #endif /* BTREENODE_H */

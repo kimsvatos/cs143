@@ -3,6 +3,17 @@
 using namespace std;
 
 /*
+ * Constructor for BTLeafNode class
+ * On success, member variables 'buffer' and 'm_nKeys' are initialized.
+ * @return none
+ */
+BTLeafNode::BTLeafNode()
+{
+	m_nKeys = 0;
+	memset(buffer, 0, PageFile::PAGE_SIZE);
+}
+
+/*
  * Read the content of the node from the page pid in the PageFile pf.
  * @param pid[IN] the PageId to read
  * @param pf[IN] PageFile to read from
