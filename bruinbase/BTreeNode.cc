@@ -157,8 +157,17 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
  */
 RC BTLeafNode::locate(int searchKey, int& eid)
 { 
+	int entrySize = sizeof(int) + sizeof(RecordId);
+	int i; 
+	for(i = 0; i < m_nKeys; i++){
+		int currentKey;
+		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
+		if(currentKey >= searchKey){
+			break;
+		}
+	}
 
-
+    eid = i;
 	return 0; 
 }
 
