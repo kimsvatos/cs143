@@ -20,9 +20,9 @@ class BTLeafNode {
   public:
 
    /**
-    * Constructor for BTLeafNode class
-    * On success, member variables 'buffer' and 'm_nKeys' are initialized.
-    * @return none
+    * Constructor for BTLeafNode class.
+    * @success variable 'm_nKeys' is initialized to zero.
+    * @return none.
     */
     BTLeafNode();
 
@@ -115,7 +115,6 @@ class BTLeafNode {
 
    /**
     * The number of keys currently stored in the node.
-    * Makes 'getKeyCount' trivial.
     */
     int m_nKeys;
 }; 
@@ -128,9 +127,9 @@ class BTNonLeafNode {
   public:
 
    /**
-    * Constructor for BTNonLeafNode class
-    * On success, member variables 'buffer' and 'm_nKeys' are initialized.
-    * @return none
+    * Constructor for BTNonLeafNode class.
+    * @success variable 'm_nKeys' is initialized to zero.
+    * @return none.
     */
     BTNonLeafNode();
 
@@ -207,7 +206,6 @@ class BTNonLeafNode {
 
    /**
     * The number of keys currently stored in the node.
-    * Makes 'getKeyCount' trivial.
     */
     int m_nKeys;
 }; 
