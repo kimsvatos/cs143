@@ -87,6 +87,7 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 		if (key <= currentKey)
 			break;
 	}
+
 	int offset = i * entrySize;
 
 	/* Create new buffer / page that we will eventually write out as updated node  */
@@ -299,11 +300,11 @@ int BTNonLeafNode::getKeyCount()
  */
 RC BTNonLeafNode::insert(int key, PageId pid)
 { 
-	/* Entry consists of a key and RecordId  */
-	int entrySize = sizeof(int) + sizeof(RecordId);
+	/* Entry consists of a key and PageId  */
+	int entrySize = sizeof(int) + sizeof(PageId);
 
 	/* Number of entries = total page size (except last pointer) divided by size of entry  */
-	int totalEntries = (PageFile::PAGE_SIZE - sizeof(PageId)) / entrySize;
+	int totalEntries = (PageFile::PAGE_SIZE - entrySize) / entrySize;
 	
 	if (getKeyCount() >= totalEntries)
 		return RC_NODE_FULL;
@@ -315,9 +316,9 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	 */
 	int i;
 	int currentKey;
-	for (i = 0; i < totalEntries - 1; i++) {
+	for (i = 1; i < totalEntries - 1; i++) {
 
-		if (i >= m_nKeys)  /* The next entry is empty, we can insert here  */
+		if (i > m_nKeys)  /* The next entry is empty, we can insert here  */
 			break;
 
 		/* Otherwise, check if key being inserted is <= key in current entry  */
@@ -325,6 +326,7 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 		if (key <= currentKey)
 			break;
 	}
+
 	int offset = i * entrySize;
 
 	/* Create new buffer / page that we will eventually write out as updated node  */
@@ -338,14 +340,10 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 
 	/* Copy the new entry, starting at position of offset  */
 	memcpy(newBuff + offset, &key, sizeof(int));
-	memcpy(newBuff + offset + sizeof(int), &pid, sizeof(RecordId));
+	memcpy(newBuff + offset + sizeof(int), &pid, sizeof(PageId));
 
 	/* Copy all entries (if any) that come after the newly inserted entry  */
-	memcpy(newBuff + offset + entrySize, buffer + offset, m_nKeys * entrySize - offset);
-
-	/* End the last 4 bytes of the buffer / page with pid pointing to the next neighbor node  */
-	PageId nextNode = getNextNodePtr();
-	memcpy(newBuff + PageFile::PAGE_SIZE - sizeof(PageId), &nextNode, sizeof(PageId));
+	memcpy(newBuff + offset + entrySize, buffer + offset, m_nKeys * entrySize - offset + entrySize);
 
 	/* Copy the new node contents into the 'buffer' member variable to update node  */
 	memcpy(buffer, newBuff, PageFile::PAGE_SIZE);
@@ -354,8 +352,6 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	/* Update m_nKeys to reflect successful insertion of entry to leaf node  */
 	m_nKeys++;
 
-	return 0; 
-	m_nKeys++;
 	return 0; 
 }
 
@@ -399,14 +395,8 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
  */
 RC BTNonLeafNode::initializeRoot(PageId pid1, int key, PageId pid2)
 { 
-
-	memcpy(temp, &pid1, sizeof(pageId));
-	ret = insert(key, pid2);
-	if(ret == 0)
-		return 0;
-	else
-		return ret;
-
+	memcpy(buffer, &pid1, sizeof(pageId));
+	return insert(key, pid2);
 }
 
 
