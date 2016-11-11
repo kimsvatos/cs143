@@ -394,7 +394,10 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
 		if(searchKey < currentKey){
 			// use pid on left
-			memcpy(&pid, )
+			if(i == 1)
+				memcpy(&pid, buffer, sizeof(PageId));
+			else
+				memcpy(&pid, (buffer + (i*entrySize) - sizeof(PageId)), sizeof(PageId) );
 		}
 	}
 
