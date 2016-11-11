@@ -287,7 +287,9 @@ RC BTNonLeafNode::write(PageId pid, PageFile& pf)
  * @return the number of keys in the node
  */
 int BTNonLeafNode::getKeyCount()
-{ return 0; }
+{ 
+	return m_nKeys; 
+}
 
 
 /*
@@ -346,4 +348,25 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTNonLeafNode::initializeRoot(PageId pid1, int key, PageId pid2)
-{ return 0; }
+{ 
+
+	memcpy(temp, &pid1, sizeof(pageId));
+	ret = insert(key, pid2);
+	if(ret == 0)
+		return 0;
+	else
+		return ret;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
