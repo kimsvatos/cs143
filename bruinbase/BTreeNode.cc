@@ -199,7 +199,7 @@ RC BTLeafNode::readEntry(int eid, int& key, RecordId& rid)
 	/* Entry consists of a key and RecordId  */
 	int entrySize = sizeof(int) + sizeof(RecordId);
 
-	memcpy(&key, buffer + (eid * entrySize)              , sizeof(int));
+	memcpy(&key, buffer + (eid * entrySize), sizeof(int));
 	memcpy(&rid, buffer + (eid * entrySize) + sizeof(int), sizeof(RecordId));
 
 	return 0;  // Entry successfully read
@@ -267,7 +267,6 @@ BTNonLeafNode::BTNonLeafNode()
  */
 RC BTNonLeafNode::read(PageId pid, const PageFile& pf)
 { 
-	//read into member buffer
 	return pf.read(pid, buffer); 
 }
     
