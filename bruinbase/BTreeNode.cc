@@ -300,11 +300,62 @@ int BTNonLeafNode::getKeyCount()
  */
 RC BTNonLeafNode::insert(int key, PageId pid)
 { 
+	/* Entry consists of a key and RecordId  */
+	int entrySize = sizeof(int) + sizeof(RecordId);
 
-	//TODO actual insert
+	/* Number of entries = total page size (except last pointer) divided by size of entry  */
+	int totalEntries = (PageFile::PAGE_SIZE - sizeof(PageId)) / entrySize;
+	
+	if (getKeyCount() >= totalEntries)
+		return RC_NODE_FULL;
 
+	/* Loop through all entries in the buffer, searching for the first entry with 
+	 * a key value that is greater than the key value of the entry to insert. If
+	 * we search through all but the last entry in the node, we know from above
+	 * that the node is not full and thus can insert the entry into the last spot.
+	 */
+	int i;
+	int currentKey;
+	for (i = 0; i < totalEntries - 1; i++) {
 
-	//update m_nKeys
+		if (i >= m_nKeys)  /* The next entry is empty, we can insert here  */
+			break;
+
+		/* Otherwise, check if key being inserted is <= key in current entry  */
+		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
+		if (key <= currentKey)
+			break;
+	}
+	int offset = i * entrySize;
+
+	/* Create new buffer / page that we will eventually write out as updated node  */
+	char* newBuff = (char*) malloc (PageFile::PAGE_SIZE);
+	if (newBuff == NULL) {
+		fprintf(stderr, "Error updating node with new insertion\n");
+	}
+
+	/* Copy all entries up to current offset into new buffer  */
+	memcpy(newBuff, buffer, offset);
+
+	/* Copy the new entry, starting at position of offset  */
+	memcpy(newBuff + offset, &key, sizeof(int));
+	memcpy(newBuff + offset + sizeof(int), &pid, sizeof(RecordId));
+
+	/* Copy all entries (if any) that come after the newly inserted entry  */
+	memcpy(newBuff + offset + entrySize, buffer + offset, m_nKeys * entrySize - offset);
+
+	/* End the last 4 bytes of the buffer / page with pid pointing to the next neighbor node  */
+	PageId nextNode = getNextNodePtr();
+	memcpy(newBuff + PageFile::PAGE_SIZE - sizeof(PageId), &nextNode, sizeof(PageId));
+
+	/* Copy the new node contents into the 'buffer' member variable to update node  */
+	memcpy(buffer, newBuff, PageFile::PAGE_SIZE);
+	free(newBuff);
+
+	/* Update m_nKeys to reflect successful insertion of entry to leaf node  */
+	m_nKeys++;
+
+	return 0; 
 	m_nKeys++;
 	return 0; 
 }
