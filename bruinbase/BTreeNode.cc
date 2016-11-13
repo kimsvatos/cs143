@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -428,10 +429,82 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, int& midKey)
 { 
 	//TO DO actual split, call insert twice
-	int m_nKeys = 0;
+	int entrySize = sizeof(int) + sizeof(PageId);
+	int maxEntries = (PageFile::PAGE_SIZE - sizeof(PageId))/entrySize; 
+	if(sibling.getKeyCount() != 0)
+			return RC_INVALID_ATTRIBUTE; //check
+	if(getKeyCount() < maxEntries)
+			return RC_INVALID_FILE_FORMAT; //check error
 
-	//update num keys bc we call insert twice
-	m_nKeys--;
+	//half to stay
+	//CHECK for pid offset
+		//add one to entry size for first (numKeys, pid) entry
+	int splitOffset = int(ceil(float(maxEntries)/float(2) )) * (entrySize) + entrySize;
+
+	//need to determine which key is being removed
+	/*
+	|    ....   |  lastKey  |  pid   | *SPLIT OFFSET* |  firstKey   |    pid  | .......| 
+	*/
+	int lastKey, firstKey;
+	memcpy(&lastKey, buffer + splitOffset - entrySize, sizeof(int));
+	memcpy(&firstKey, buffer + splitOffset, sizeof(int));
+
+	if(key < lastKey){ //key1 is removed
+		memcpy(sibling.buffer + entrySize, buffer + splitOffset, PageFile::PAGE_SIZE - splitOffset); 
+
+		//store keyCount in sibling
+		int sibKeys = getKeyCount() - int(ceil(float(maxEntries)/float(2))); 
+		sibling.updateKeyCount(sibKeys);
+		//memcpy(sibling.buffer, &sibKeys, sizeof(int));
+		//store initial PID
+		memcpy(sibling.buffer + sizeof(int), buffer + splitOffset - sizeof(int), sizeof(int));
+
+		//update number of keys here
+		int newNumKeys = int(ceil(float(maxEntries)/float(2))) - 1;
+		updateKeyCount(newNumKeys);
+		//memcpy(buffer, &newNumKeys, sizeof(int));
+ 
+		//save midKey and insert new key
+		memcpy(&midKey, buffer + splitOffset - entrySize, sizeof(int));
+		insert(key, pid);
+
+	}
+	else if (key > firstKey){ //firstKey is being kicked out
+		memcpy(sibling.buffer + entrySize, buffer + splitOffset + entrySize, PageFILE::PAGE_SIZE - splitOffset - entrySize);
+		int sibKeys = getKeyCount() - int(ceil(float(maxEntries)/float(2))) - 1; 
+		sibling.updateKeyCount(sibKeys);
+
+		//set PID of new sibling
+		memcpy(sibling.buffer + sizeof(int), buffer + splitOffset + sizeof(int), sizeof(PageId));
+
+		//update key count
+		int newNumKeys = int(ceil(float(maxEntries)/float(2)));
+		updateKeyCount(newNumKeys);
+
+		//save midkey and insert new key
+		memcpy(&midKey, buffer + splitOffset, sizeof(int));
+		sibling.insert(key, pid);
+	}
+	else //key is to be removed
+	{
+		//copy right side to sibling
+		memcpy(sibling.buffer + entrySize, buffer + splitOffset, PageFile::PAGE_SIZE - halfIndex);
+		
+		//set first pid of sibling
+		memcpy(sibling.buffer + sizeof(int), &pid, sizeof(PageId));
+
+		//set number of sib keys
+		int sibKeys = getKeyCount() - int(ceil(float(maxEntries)/float(2)));
+		sibling.updateKeyCount(sibKeys);
+
+		//update key count
+		int newNumKeys =  int(ceil(float(maxEntries)/float(2)));
+		updateKeyCount(newNumKeys);
+
+		//save midkey
+		midKey = key; 
+
+	}
 
 	return 0; 
 }
