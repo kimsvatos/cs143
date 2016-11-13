@@ -21,7 +21,7 @@ class BTLeafNode {
 
    /**
     * Constructor for BTLeafNode class.
-    * @success variable 'm_nKeys' is initialized to zero.
+    * @success initializes number of keys in node to zero.
     * @return none.
     */
     BTLeafNode();
@@ -114,10 +114,11 @@ class BTLeafNode {
     char buffer[PageFile::PAGE_SIZE];
 
    /**
-    * The number of keys currently stored in the node.
+    * Update the number of keys stored in the node.
+    * @return the updated number of keys in the node.
     */
-    int m_nKeys;
-}; 
+    int updateKeyCount(const int& keyCount);
+};
 
 
 /**
@@ -128,7 +129,7 @@ class BTNonLeafNode {
 
    /**
     * Constructor for BTNonLeafNode class.
-    * @success variable 'm_nKeys' is initialized to zero.
+    * @success initializes number of keys in node to zero. 
     * @return none.
     */
     BTNonLeafNode();
@@ -205,9 +206,10 @@ class BTNonLeafNode {
     char buffer[PageFile::PAGE_SIZE];
 
    /**
-    * The number of keys currently stored in the node.
+    * Update the number of keys stored in the node.
+    * @return the updated number of keys in the node.
     */
-    int m_nKeys;
+    int updateKeyCount(const int& keyCount);
 }; 
 
 #endif /* BTREENODE_H */
