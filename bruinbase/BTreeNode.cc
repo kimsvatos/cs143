@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -167,18 +168,43 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 RC BTLeafNode::insertAndSplit(int key, const RecordId& rid, 
                               BTLeafNode& sibling, int& siblingKey)
 { 
-	///do the thing HERE TODO
+	/* Compute:
+	 *   - Size of a leaf node entry (consists of key and RecordId)
+     *   - Total # of entries that can fit into a node
+     *     - Have to subtract pid and entry reserved for keyCount
+     *     - (see structure above)
+     */
+	int entrySize = sizeof(int) + sizeof(RecordId);
+	int totalEntries = (PageFile::PAGE_SIZE - sizeof(PageId) - entrySize) / entrySize;
 
-	// TODO: replace
-	int m_nKeys = 0;
+	int keyCount = getKeyCount();
+	if (keyCount != totalEntries       // Should only do insert-split if node already full
+		|| sibling.getKeyCount() != 0) // Sibling node MUST be EMPTY when function called
+	{
+		return RC_INVALID_FILE_FORMAT;
+	}
 
+	int halfKeys = int( ceil( float(totalEntries) / float(2) ));
+	int splitOffset = halfKeys * entrySize;
 
-	// update m_nKeys, we will call insert twice which will account for two 
-	// new nodes, so remove one from count for split
-	m_nKeys--;
+	memcpy(sibling.buffer, buffer + splitOffset + entrySize, PageFile::PAGE_SIZE - sizeof(PageId) - splitOffset);
+	
+	sibling.updateKeyCount(totalEntries - halfKeys);
+	updateKeyCount(halfKeys);
+	
+	// TODO: setNextNodePtr for other node???
+	sibling.setNextNodePtr(getNextNodePtr());
+
+	int firstSiblingKey;
+	memcpy(&firstSiblingKey, sibling.buffer + entrySize, sizeof(int));
+	if (key >= firstSiblingKey)
+		sibling.insert(key, rid);
+	else
+		insert(key, rid);
+
+	memcpy(&siblingKey, sibling.buffer + entrySize, sizeof(int));
 
 	return 0; 
-
 }
 
 /**
