@@ -1,8 +1,19 @@
 Kyle Haacker, Kim Svatos
 904467146, 604425426
 
-Project 2 - Part A
+Project 2 - Part B
 
-We believe that we have fully implemented all functionality for this part of the project. The code for reading the load file and creating the table file is all located in the 'load' function, as required by the spec. The only functionality that remains to be implemented for the 'load' function is the creation of an index for option 'WITH INDEX', but this functionality is to be implemented in a later iteration of the project.
+We believe that we have fully implemented all functionality for this part of the project. 
 
-For this part of the project, we worked entirely together, at the same time.
+For keeping track of key count, we decided to store an integer in the first four bytes of 
+every buffer. That way, these four bytes can be quickly read and accessed when calling
+getKeyCount(), and we created an additioanl function updateKeyCount() to easily change
+this value. 
+
+For this part of the project, work was broken up as follows:
+
+80% Together: general outlining, functions, structure
+10% Kyle: additional Leaf functions and debugging, testing
+10% Kim: additional non-leaf functions. 
+
+
