@@ -29,7 +29,13 @@ BTreeIndex::BTreeIndex()
  */
 RC BTreeIndex::open(const string& indexname, char mode)
 {
-    return 0;
+	//if(ret = pf.open(indexname, mode)) //if ret is not zero, return error. 
+	//	return ret;
+
+	return pf.endPid();
+
+
+
 }
 
 /*
