@@ -185,15 +185,12 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 	}
 
 	int halfKeys = int( ceil( float(totalEntries) / float(2) ));
-	int splitOffset = halfKeys * entrySize;
+	int splitOffset = halfKeys * entrySize + entrySize;
 
-	memcpy(sibling.buffer, buffer + splitOffset + entrySize, PageFile::PAGE_SIZE - sizeof(PageId) - splitOffset);
+	memcpy(sibling.buffer + entrySize, buffer + splitOffset, PageFile::PAGE_SIZE - sizeof(PageId) - splitOffset);
 	
 	sibling.updateKeyCount(totalEntries - halfKeys);
 	updateKeyCount(halfKeys);
-	
-	// TODO: setNextNodePtr for other node???
-	sibling.setNextNodePtr(getNextNodePtr());
 
 	int firstSiblingKey;
 	memcpy(&firstSiblingKey, sibling.buffer + entrySize, sizeof(int));
@@ -453,11 +450,12 @@ RC BTNonLeafNode::insert(int key, PageId pid)
  */
 RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, int& midKey)
 { 
-	//TO DO actual split, call insert twice
+
 	int entrySize = sizeof(int) + sizeof(PageId);
-	int maxEntries = (PageFile::PAGE_SIZE - sizeof(PageId))/entrySize; 
+	int maxEntries = (PageFile::PAGE_SIZE - entrySize) / entrySize; 
+
 	if(sibling.getKeyCount() != 0)
-			return RC_INVALID_ATTRIBUTE; //check
+			return RC_INVALID_FILE_FORMAT; //check
 	if(getKeyCount() < maxEntries)
 			return RC_INVALID_FILE_FORMAT; //check error
 
@@ -469,20 +467,22 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 	//need to determine which key is being removed
 	/*
 	|    ....   |  lastKey  |  pid   | *SPLIT OFFSET* |  firstKey   |    pid  | .......| 
+														| keycount | frst pid | firstkey | ....
 	*/
 	int lastKey, firstKey;
 	memcpy(&lastKey, buffer + splitOffset - entrySize, sizeof(int));
 	memcpy(&firstKey, buffer + splitOffset, sizeof(int));
 
-	if(key < lastKey){ //key1 is removed
+	if(key < lastKey){ //lastKey is removed
 		memcpy(sibling.buffer + entrySize, buffer + splitOffset, PageFile::PAGE_SIZE - splitOffset); 
 
 		//store keyCount in sibling
-		int sibKeys = getKeyCount() - int(ceil(float(maxEntries)/float(2))); 
+		int sibKeys = maxEntries - int(ceil(float(maxEntries)/float(2))); 
 		sibling.updateKeyCount(sibKeys);
 		//memcpy(sibling.buffer, &sibKeys, sizeof(int));
+
 		//store initial PID
-		memcpy(sibling.buffer + sizeof(int), buffer + splitOffset - sizeof(int), sizeof(int));
+		memcpy(sibling.buffer + sizeof(int), buffer + splitOffset - sizeof(PageId), sizeof(PageId));
 
 		//update number of keys here
 		int newNumKeys = int(ceil(float(maxEntries)/float(2))) - 1;
@@ -495,8 +495,8 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 
 	}
 	else if (key > firstKey){ //firstKey is being kicked out
-		memcpy(sibling.buffer + entrySize, buffer + splitOffset + entrySize, PageFILE::PAGE_SIZE - splitOffset - entrySize);
-		int sibKeys = getKeyCount() - int(ceil(float(maxEntries)/float(2))) - 1; 
+		memcpy(sibling.buffer + entrySize, buffer + splitOffset + entrySize, PageFile::PAGE_SIZE - splitOffset - entrySize);
+		int sibKeys = maxEntries - int(ceil(float(maxEntries)/float(2))) - 1; 
 		sibling.updateKeyCount(sibKeys);
 
 		//set PID of new sibling
@@ -510,16 +510,16 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 		memcpy(&midKey, buffer + splitOffset, sizeof(int));
 		sibling.insert(key, pid);
 	}
-	else //key is to be removed
+	else //new key is to be removed
 	{
 		//copy right side to sibling
-		memcpy(sibling.buffer + entrySize, buffer + splitOffset, PageFile::PAGE_SIZE - halfIndex);
+		memcpy(sibling.buffer + entrySize, buffer + splitOffset, PageFile::PAGE_SIZE - splitOffset);
 		
 		//set first pid of sibling
 		memcpy(sibling.buffer + sizeof(int), &pid, sizeof(PageId));
 
 		//set number of sib keys
-		int sibKeys = getKeyCount() - int(ceil(float(maxEntries)/float(2)));
+		int sibKeys = maxEntries - int(ceil(float(maxEntries)/float(2)));
 		sibling.updateKeyCount(sibKeys);
 
 		//update key count
