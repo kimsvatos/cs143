@@ -27,6 +27,7 @@ typedef struct {
   int     eid;  
 } IndexCursor;
 
+const PageId METADATA_PID = 0; 
 /**
  * Implements a B-Tree index for bruinbase.
  * 
