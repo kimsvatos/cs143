@@ -29,6 +29,9 @@ BTreeIndex::BTreeIndex()
  */
 RC BTreeIndex::open(const string& indexname, char mode)
 {
+
+	int ret;
+
 	if(ret = pf.open(indexname, mode)) //if ret is not zero, return error. 
 		return ret;
 
