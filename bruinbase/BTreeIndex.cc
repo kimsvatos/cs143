@@ -9,6 +9,11 @@
  
 #include "BTreeIndex.h"
 #include "BTreeNode.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -32,15 +37,14 @@ RC BTreeIndex::open(const string& indexname, char mode)
 {
 
 	int ret;
+	char buffer[PageFile::PAGE_SIZE];
 
 	if(ret = pf.open(indexname, mode)) //if ret is not zero, return error. 
 		return ret;
 
-	if(pf.endPid() != METADATA_PID){
+	if(pf.endPid() != BTreeIndex::METADATA_PID){
 
-		char buffer[PageFile::PAGE_SIZE];
-
-		if(ret = pf.read(METADATA_PID, buffer))
+		if(ret = pf.read(BTreeIndex::METADATA_PID, buffer))
 			return ret;
 
 		//NOTE: maybe check for error
@@ -62,12 +66,13 @@ RC BTreeIndex::open(const string& indexname, char mode)
  */
 RC BTreeIndex::close()
 {
+	int ret;
 	char buffer[PageFile::PAGE_SIZE];
 
 	memcpy(buffer, &rootPid, sizeof(PageId));
 	memcpy(buffer + sizeof(PageId), &treeHeight, sizeof(int));
 
-	if(ret = pf.write(METADATA_PID, buffer))
+	if(ret = pf.write(BTreeIndex::METADATA_PID, buffer))
 		return ret;
 
     return pf.close();
