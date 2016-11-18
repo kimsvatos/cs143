@@ -15,6 +15,9 @@
 #include <cstring>
 #include <cmath>
 
+
+//TODO: change int ret's to RC ret's
+
 using namespace std;
 
 /*
@@ -86,7 +89,78 @@ RC BTreeIndex::close()
  */
 RC BTreeIndex::insert(int key, const RecordId& rid)
 {
-    return 0;
+    
+
+	
+	if(treeHeight){ //tree already exists
+		//recursive
+		int midKey = -1;
+		int currPid = -1;
+		if(ret = insert_help(key, rid, 1, rootPid, midKey, currPid))
+			return ret;
+		else
+			return 0; 
+
+	}
+
+	else{ // new tree
+
+		BTLeafNode newNode;
+		newNode.insert(key, rid);
+
+		rootPid = (pf.endPid() == 0 ? BTreeIndex::ROOT_PID : pf.endPid());
+		
+		ret = newNode.write(rootPid, pf);
+		treeHeight = 1; 
+	}
+    return ret;
+}
+
+RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid){
+	
+	RC ret; 
+
+	if(treeHeight == currHeight){
+
+		//new leaf node
+		BTLeafNode currLeaf; 
+		if(ret = currLeaf.read(currPid, pf))
+			return ret;
+		
+		//easiest case, simply insert a leaf node
+		if(!currLeaf.insert(key, rid)){
+			return currLeaf.write(currPid, pf);
+		}
+
+		//insert failed if we get here, insert and split
+		BTLeafNode emptyLeaf; 
+		if(ret = currLeaf.insertAndSplit(key, rid, emptyLeaf, midKey))
+			return ret;
+
+		int endPid = pf.endPid();
+
+		emptyLeaf.setNextNodePtr(currLeaf.getNextNodePtr());
+		currLeaf.setNextNodePtr(endPid);
+
+		if(ret = currLeaf.write(endPid, pf))
+			return ret;
+
+		if(ret = currLeaf.write(currPid, pf))
+			return ret;
+
+		//check if split root, holding midKey in midKey
+		if(treeHeight ==1){
+			BTNonLeafNode root;
+			root.initializeRoot(currPid, midKey, endPid);
+			treeHeight++;
+
+			rootPid = pf.endPid();
+			root.write(rootPid, pf);
+		}
+
+		return 0; 
+
+	}
 }
 
 /**
