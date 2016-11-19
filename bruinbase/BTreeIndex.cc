@@ -89,7 +89,7 @@ RC BTreeIndex::close()
  */
 RC BTreeIndex::insert(int key, const RecordId& rid)
 {
-    
+    RC ret;
 
 	
 	if(treeHeight){ //tree already exists
