@@ -96,6 +96,8 @@ class BTreeIndex {
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
 
+  RC insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid);
+
   PageId   rootPid;    /// the PageId of the root node
   int      treeHeight; /// the height of the tree
   /// Note that the content of the above two variables will be gone when

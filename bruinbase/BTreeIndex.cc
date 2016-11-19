@@ -128,35 +128,45 @@ RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId 
 			return ret;
 		
 		//easiest case, simply insert a leaf node
-		if(!currLeaf.insert(key, rid)){
+		if(currLeaf.insert(key, rid)==0){
+			//fprintf(stderr, "failed at 2");
 			return currLeaf.write(currPid, pf);
 		}
-
 		//insert failed if we get here, insert and split
 		BTLeafNode emptyLeaf; 
 
-		if(ret = currLeaf.insertAndSplit(key, rid, emptyLeaf, midKey))
+		if(ret = currLeaf.insertAndSplit(key, rid, emptyLeaf, midKey)){
+			fprintf(stderr, "failed at 3");
 			return ret;
+		}
 
 		int endPid = pf.endPid();
 
 		emptyLeaf.setNextNodePtr(currLeaf.getNextNodePtr());
 		currLeaf.setNextNodePtr(endPid);
 
-		if(ret = currLeaf.write(endPid, pf))
+		if(ret = currLeaf.write(endPid, pf)){
+			fprintf(stderr, "failed at 4");
 			return ret;
+		}
 
-		if(ret = currLeaf.write(currPid, pf))
+		if(ret = currLeaf.write(currPid, pf)){
+			fprintf(stderr, "failed at 5");
 			return ret;
+		}
 
 		//check if split root, holding midKey in midKey
+		fprintf(stderr, "treeheight is....%i\n", treeHeight);
 		if(treeHeight ==1){
+			//fprintf(stderr, "failed at 6");
+			fprintf(stderr, "endpid is.....%i\ncurrpid is....%i\n", endPid, currPid);			
 			BTNonLeafNode root;
 			root.initializeRoot(currPid, midKey, endPid);
 			treeHeight++;
-
+			fprintf(stderr, "midkey is.....%i\n", midKey);
 			rootPid = pf.endPid();
 			root.write(rootPid, pf);
+			fprintf(stderr, "rootpid is.....%i\n", rootPid);
 		}
 	}
 	else{
@@ -171,9 +181,9 @@ RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId 
 		insert_help(key, rid, currHeight + 1, kidPid, recKey, recPid);
 
 		//if we get here there has been an error
-		(!(recKey == -1 && recPid == -1)){
+		if (!(recKey == -1 && recPid == -1)){
 			if(!insideNode.insert(recKey, recPid))
-				return midNode.write(currPid, pf);
+				return insideNode.write(currPid, pf);
 
 			BTNonLeafNode newInsideNode;
 			insideNode.insertAndSplit(recKey, recPid, newInsideNode, midKey);
@@ -186,9 +196,11 @@ RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId 
 			if(ret = newInsideNode.write(endPid, pf))
 				return ret;
 
+			fprintf(stderr, "treeheight is....%i", treeHeight);
 			if(treeHeight == 1){
 				BTNonLeafNode root;
 				root.initializeRoot(currPid, midKey, endPid);
+				fprintf(stderr, "endpid is.....%i\ncurrpid is....%i\n", endPid, currPid);
 				treeHeight++;
 				rootPid = pf.endPid();
 				root.write(rootPid, pf);
@@ -197,7 +209,7 @@ RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId 
 		}
 		return 0;
 	}
-		
+		return 0; 
 
 	
 }
