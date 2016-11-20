@@ -92,8 +92,9 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
 {
     RC ret;
 
+    /* For tree that already exists (i.e., has nodes), perform recursive insert,
+       starting at a current height of 1  */
 	if (treeHeight != 0) {
-		//recursive
 		int midKey = -1;
 		int currPid = -1;
 		ret = insert_help(key, rid, 1, rootPid, midKey, currPid);
@@ -101,7 +102,6 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
 
 	/* For a new tree, we start with an empty leaf node and insert the pair  */
 	else {
-
 		BTLeafNode newNode;
 		newNode.insert(key, rid);
 
@@ -115,17 +115,16 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     return ret;
 }
 
-RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid){
-	
+RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid)
+{
 	RC ret; 
 
 	if(treeHeight == currHeight){
 
-		//new leaf node
 		BTLeafNode currLeaf; 
 		if(ret = currLeaf.read(currPid, pf))
 			return ret;
-		
+
 		//easiest case, simply insert a leaf node
 		if(currLeaf.insert(key, rid)==0){
 			//fprintf(stderr, "failed at 2");
@@ -155,17 +154,17 @@ RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId 
 		}
 
 		//check if split root, holding midKey in midKey
-		fprintf(stderr, "treeheight is....%i\n", treeHeight);
+		//fprintf(stderr, "treeheight is....%i\n", treeHeight);
 		if(treeHeight ==1){
 			//fprintf(stderr, "failed at 6");
-			fprintf(stderr, "endpid is.....%i\ncurrpid is....%i\n", endPid, currPid);			
+			//fprintf(stderr, "endpid is.....%i\ncurrpid is....%i\n", endPid, currPid);			
 			BTNonLeafNode root;
 			root.initializeRoot(currPid, midKey, endPid);
 			treeHeight++;
-			fprintf(stderr, "midkey is.....%i\n", midKey);
+			//fprintf(stderr, "midkey is.....%i\n", midKey);
 			rootPid = pf.endPid();
 			root.write(rootPid, pf);
-			fprintf(stderr, "rootpid is.....%i\n", rootPid);
+			//fprintf(stderr, "rootpid is.....%i\n", rootPid);
 		}
 	}
 	else{
@@ -262,7 +261,7 @@ void BTreeIndex::printContents(const char* file)
 	if (logFile == NULL)
 		return;
 
-	fprintf(logFile, "%s\n%s\n\nMETADATA:\n\trootPid = %i\n\ttreeHeight = %i\n\tendPid = %i\n\n%s\n\n", 
+	fprintf(logFile, "%s\n%s\n\nTREE METADATA:\n\trootPid = %i\n\ttreeHeight = %i\n\tendPid = %i\n\n%s\n\n", 
 		separator.c_str(), separator.c_str(), rootPid, treeHeight, pf.endPid(),
 		separator.c_str());
 
