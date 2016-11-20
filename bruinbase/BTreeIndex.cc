@@ -9,14 +9,10 @@
  
 #include "BTreeIndex.h"
 #include "BTreeNode.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include <cstring>
-#include <cmath>
-
-
-//TODO: change int ret's to RC ret's
+#include <stdio.h>
+//#include <stdlib.h>
 
 using namespace std;
 
@@ -25,8 +21,8 @@ using namespace std;
  */
 BTreeIndex::BTreeIndex()
 {
-    rootPid = -1;
-    treeHeight = 0;
+    rootPid = -1;	  /* No root node yet, set rootPid to invalid value    */
+    treeHeight = 0;	  /* No nodes created yet, thus height should be zero  */
 }
 
 /*
@@ -38,29 +34,30 @@ BTreeIndex::BTreeIndex()
  */
 RC BTreeIndex::open(const string& indexname, char mode)
 {
-
-	int ret;
+	RC ret;
 	char buffer[PageFile::PAGE_SIZE];
 
-	if(ret = pf.open(indexname, mode)) //if ret is not zero, return error. 
+	/* Open index file in appropriate mode, returning error code if open fails  */
+	if (ret = pf.open(indexname, mode))
 		return ret;
 
-	if(pf.endPid() != BTreeIndex::METADATA_PID){
+	/* Store file mode in member variable. If the file was opened in 'r' mode and
+	   we call 'close', we should avoid writing any changes to the pf, as this
+	   will result in an error  */
+	pfMode = mode;
+
+	/* If index has been modified, retrieve rootPid and treeHeight from the index
+	 * file being opened  */
+	if(pf.endPid() != BTreeIndex::METADATA_PID) {
 
 		if(ret = pf.read(BTreeIndex::METADATA_PID, buffer))
 			return ret;
 
-		//NOTE: maybe check for error
 		memcpy(&rootPid, buffer, sizeof(PageId));
 		memcpy(&treeHeight, buffer + sizeof(PageId), sizeof(int));
-
 	}
 
-
 	return 0;
-
-
-
 }
 
 /*
@@ -69,14 +66,18 @@ RC BTreeIndex::open(const string& indexname, char mode)
  */
 RC BTreeIndex::close()
 {
-	int ret;
+	RC ret;
 	char buffer[PageFile::PAGE_SIZE];
 
-	memcpy(buffer, &rootPid, sizeof(PageId));
-	memcpy(buffer + sizeof(PageId), &treeHeight, sizeof(int));
+	/* If the file was opened in 'w' mode, save rootPid and treeHeight to file  */
+	if (pfMode == 'w') {
 
-	if(ret = pf.write(BTreeIndex::METADATA_PID, buffer))
-		return ret;
+		memcpy(buffer, &rootPid, sizeof(PageId));
+		memcpy(buffer + sizeof(PageId), &treeHeight, sizeof(int));
+
+		if (ret = pf.write(BTreeIndex::METADATA_PID, buffer))
+			return ret;
+	}
 
     return pf.close();
 }
@@ -91,28 +92,26 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
 {
     RC ret;
 
-	
-	if(treeHeight){ //tree already exists
+	if (treeHeight != 0) {
 		//recursive
 		int midKey = -1;
 		int currPid = -1;
-		if(ret = insert_help(key, rid, 1, rootPid, midKey, currPid))
-			return ret;
-		else
-			return 0; 
-
+		ret = insert_help(key, rid, 1, rootPid, midKey, currPid);
 	}
 
-	else{ // new tree
+	/* For a new tree, we start with an empty leaf node and insert the pair  */
+	else {
 
 		BTLeafNode newNode;
 		newNode.insert(key, rid);
 
-		rootPid = (pf.endPid() == 0 ? BTreeIndex::ROOT_PID : pf.endPid());
+		// TODO: Is this check necessary?
+		rootPid = (pf.endPid() == BTreeIndex::METADATA_PID ? BTreeIndex::ROOT_PID : pf.endPid());
 		
-		ret = newNode.write(rootPid, pf);
-		treeHeight = 1; 
+		if ((ret = newNode.write(rootPid, pf)) == 0)
+			treeHeight++; 
 	}
+
     return ret;
 }
 
@@ -248,4 +247,44 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
 RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 {
     return 0;
+}
+
+void BTreeIndex::printContents(const char* file)
+{
+	string separator = "////////////////////////////////////////////////////////////";
+	const char* buffer;
+	PageId pid;
+	int key;
+	int keyCount;
+	RecordId rid;
+
+	FILE* logFile = fopen(file, "w");
+	if (logFile == NULL)
+		return;
+
+	fprintf(logFile, "%s\n%s\n\nMETADATA:\n\trootPid = %i\n\ttreeHeight = %i\n\tendPid = %i\n\n%s\n\n", 
+		separator.c_str(), separator.c_str(), rootPid, treeHeight, pf.endPid(),
+		separator.c_str());
+
+	if (treeHeight == 1) {
+		BTLeafNode root;
+		root.read(rootPid, pf);
+		buffer = root.getContents();
+		keyCount = root.getKeyCount();
+		pid = root.getNextNodePtr();
+
+		fprintf(logFile, "Root Leaf Node (treeHeight = 1)\n");
+		fprintf(logFile, "keyCount = %i\n", keyCount);
+		fprintf(logFile, "next pid = %i\n\n", pid);
+
+		for (int i = 1; i <= keyCount; i++) {
+			memcpy(&key, buffer + (i * 12), sizeof(int));
+			memcpy(&rid, buffer + (i * 12) + sizeof(int), sizeof(RecordId));
+			fprintf(logFile, "entry %i:\n", i);
+			fprintf(logFile, "\tkey = %i\n", key);
+			fprintf(logFile, "\trid = (%i, %i)\n\n", rid.pid, rid.sid);
+		}
+
+	}
+
 }

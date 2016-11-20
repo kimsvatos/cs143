@@ -21,12 +21,9 @@
  * IndexCursor is used for index lookup and traversal.
  */
 typedef struct {
-  // PageId of the index entry
-  PageId  pid;  
-  // The entry number inside the node
-  int     eid;  
+  PageId  pid;   // PageId of the index entry
+  int     eid;   // The entry number inside the node
 } IndexCursor;
-
 
 /**
  * Implements a B-Tree index for bruinbase.
@@ -35,8 +32,8 @@ typedef struct {
 class BTreeIndex {
  public:
 
-  static const PageId METADATA_PID = 0;
-  static const PageId ROOT_PID     = 1;
+  static const PageId METADATA_PID = 0;   // PageId where rootPid, treeHeight stored
+  static const PageId ROOT_PID     = 1;   // PageId containing root
 
   BTreeIndex();
 
@@ -92,11 +89,16 @@ class BTreeIndex {
    * @return error code. 0 if no error
    */
   RC readForward(IndexCursor& cursor, int& key, RecordId& rid);
+
+  void printContents(const char* file);
   
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
 
   RC insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid);
+  char pfMode;
+
+
 
   PageId   rootPid;    /// the PageId of the root node
   int      treeHeight; /// the height of the tree
