@@ -47,7 +47,7 @@ RC BTreeIndex::open(const string& indexname, char mode)
 	pfMode = mode;
 
 	/* If index has been modified, retrieve rootPid and treeHeight from the index
-	 * file being opened  */  // TODO: Why do we need this test?
+	 * file being opened  */
 	if (pf.endPid() != BTreeIndex::METADATA_PID) {
 
 		if (ret = pf.read(BTreeIndex::METADATA_PID, buffer))
@@ -93,10 +93,10 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     RC ret;
 
     /* For tree that already exists (i.e., has nodes), perform recursive insert,
-       starting at a current height of 1  */
+       starting at a current height of 1 (root node) */
 	if (treeHeight != 0) {
-		int midKey = -1;
-		int endPid = -1;
+		int    midKey = -1;
+		PageId endPid = -1;
 		ret = recInsert(key, rid, 1, rootPid, midKey, endPid);
 	}
 
@@ -125,7 +125,7 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
  */
 RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& endPid)
 {
-	RC ret; 
+	RC ret;
 
 	/* Reached deepest level of tree (leaf nodes)  */
 	if (treeHeight == currHeight) {
@@ -332,15 +332,11 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-// todo: delete or update
+/**
+ * Print contents of B+-tree. We used this during testing / debugging, but had to
+ * comment out what we had because we used temporary (now non-existent) functions
+ * in BTreeNode.
+ */
 void BTreeIndex::printContents(const char* file)
 {
 	/*string separator = "////////////////////////////////////////////////////////////";
@@ -438,7 +434,5 @@ void BTreeIndex::printContents(const char* file)
 			fprintf(logFile, "\tkey = %i\n", key);
 			fprintf(logFile, "\tpid = %i\n", pid);
 		}
-
 	}*/
-
 }

@@ -93,7 +93,12 @@ class BTreeIndex {
    */
   RC readForward(IndexCursor& cursor, int& key, RecordId& rid);
 
-  void printContents(const char* file); // todo delete or upgrade
+  /**
+   * Print contents of B+-tree. We used this during testing / debugging, but had to
+   * comment out what we had because we used temporary (now non-existent) functions
+   * in BTreeNode.
+   */
+  void printContents(const char* file);
   
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
