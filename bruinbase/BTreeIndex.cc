@@ -227,6 +227,31 @@ RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId cu
  */
 RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
 {
+	int ret;
+	BTNonLeafNode middle;
+	BTLeafNode node;
+	int eid, currHeight;
+	PageId next = rootPid;
+
+	for(currHeight = 1; currHeight != treeHeight; currHeight++){
+
+		if(!(ret = middle.read(next, pf)))
+			return ret;
+
+		if(!(ret = middle.locateChildPtr(searchKey, next)));
+			return ret; 
+
+	}
+
+	if(!(ret = node.read(next, pf)))
+		return ret;
+
+	if(!(node.locate(searchkey, eid)))
+		return ret;
+
+	cursor.eid = eid;
+ 	cursor.pid = next;
+ 	
     return 0;
 }
 
@@ -264,7 +289,7 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 
 	cursor.eid = curEid;
 	cursor.pid = curPid; 
-	
+
     return 0;
 }
 
