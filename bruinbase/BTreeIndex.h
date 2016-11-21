@@ -95,7 +95,7 @@ class BTreeIndex {
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
 
-  RC insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid);
+  RC recInsert(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid);
   char pfMode;
 
 

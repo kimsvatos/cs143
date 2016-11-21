@@ -96,16 +96,16 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
        starting at a current height of 1  */
 	if (treeHeight != 0) {
 		int midKey = -1;
-		int currPid = -1;
-		ret = insert_help(key, rid, 1, rootPid, midKey, currPid);
+		int endPid = -1;
+		ret = recInsert(key, rid, 1, rootPid, midKey, endPid);
 	}
 
 	/* For a new tree, we start with an empty leaf node and insert the pair  */
 	else {
 		BTLeafNode newNode;
-		newNode.insert(key, rid);
+		if (ret = newNode.insert(key, rid))
+			return ret;
 
-		// TODO: Is this check necessary?
 		rootPid = (pf.endPid() == BTreeIndex::METADATA_PID ? BTreeIndex::ROOT_PID : pf.endPid());
 		
 		if ((ret = newNode.write(rootPid, pf)) == 0)
@@ -115,80 +115,76 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     return ret;
 }
 
-RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid)
+RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& endPid)
 {
 	RC ret; 
 
-	if(treeHeight == currHeight){
+	/* Reached deepest level of tree (leaf nodes)  */
+	if (treeHeight == currHeight) {
 
+		/* Access current leaf node, whose contents are in PageId 'currPid'  */
 		BTLeafNode currLeaf; 
-		if(ret = currLeaf.read(currPid, pf))
+		if (ret = currLeaf.read(currPid, pf))
 			return ret;
 
-		//easiest case, simply insert a leaf node
-		if(currLeaf.insert(key, rid)==0){
-			//fprintf(stderr, "failed at 2");
+		/* Easy case: leaf node is not full, simply insert the new pair  */
+		if (currLeaf.insert(key, rid) == 0)
 			return currLeaf.write(currPid, pf);
-		}
-		//insert failed if we get here, insert and split
+
+		/* Harder case: leaf node is full, we need to insert and split  */
 		BTLeafNode emptyLeaf; 
-
-		if(ret = currLeaf.insertAndSplit(key, rid, emptyLeaf, midKey)){
-			fprintf(stderr, "failed at 3");
+		if (ret = currLeaf.insertAndSplit(key, rid, emptyLeaf, midKey))
 			return ret;
-		}
 
-		int endPid = pf.endPid();
-
+		/* Rearrange neighbor pointers so that current leaf comes before new sibling  */
+		endPid = pf.endPid();
 		emptyLeaf.setNextNodePtr(currLeaf.getNextNodePtr());
 		currLeaf.setNextNodePtr(endPid);
 
-		if(ret = currLeaf.write(endPid, pf)){
-			fprintf(stderr, "failed at 4");
+		if (ret = currLeaf.write(currPid, pf))
 			return ret;
-		}
 
-		if(ret = currLeaf.write(currPid, pf)){
-			fprintf(stderr, "failed at 5");
+		if (ret = emptyLeaf.write(endPid, pf))
 			return ret;
-		}
 
-		//check if split root, holding midKey in midKey
-		//fprintf(stderr, "treeheight is....%i\n", treeHeight);
-		if(treeHeight ==1){
-			//fprintf(stderr, "failed at 6");
-			//fprintf(stderr, "endpid is.....%i\ncurrpid is....%i\n", endPid, currPid);			
+		/* Just split the root leaf node, need a root non-leaf node to be added to tree */
+		if (treeHeight == 1) {
 			BTNonLeafNode root;
 			root.initializeRoot(currPid, midKey, endPid);
 			treeHeight++;
-			//fprintf(stderr, "midkey is.....%i\n", midKey);
 			rootPid = pf.endPid();
 			root.write(rootPid, pf);
-			//fprintf(stderr, "rootpid is.....%i\n", rootPid);
 		}
 	}
-	else{
-		//we are still in tree, iterate down
-		BTNonLeafNode insideNode;
-		insideNode.read(currPid, pf);
-		PageId kidPid;
-		insideNode.locateChildPtr(key, kidPid);
 
+	/* Still traversing tree, haven't reached leaf nodes yet  */
+	else {
+
+		/* Access current non-leaf node, whose contents are in PageId 'currPid'  */
+		BTNonLeafNode currNonLeaf;
+		if (ret = currNonLeaf.read(currPid, pf))
+			return ret;
+		
+		/* Determine which way to traverse tree, based on key we're inserting  */
+		PageId childPid;
+		currNonLeaf.locateChildPtr(key, childPid);
+
+		/* Attempt insertion at next the next level of the tree (at childPid)  */
 		int recKey = -1;
 		int recPid = -1;
-		insert_help(key, rid, currHeight + 1, kidPid, recKey, recPid);
+		recInsert(key, rid, currHeight + 1, childPid, recKey, recPid);
 
 		//if we get here there has been an error
-		if (!(recKey == -1 && recPid == -1)){
-			if(!insideNode.insert(recKey, recPid))
-				return insideNode.write(currPid, pf);
+		if (!(recKey == -1 && recPid == -1)) {
+			if (currNonLeaf.insert(recKey, recPid) == 0)
+				return currNonLeaf.write(currPid, pf);
 
 			BTNonLeafNode newInsideNode;
-			insideNode.insertAndSplit(recKey, recPid, newInsideNode, midKey);
+			currNonLeaf.insertAndSplit(recKey, recPid, newInsideNode, midKey);
 
 			int endPid = pf.endPid();
 
-			if(ret = insideNode.write(currPid, pf))
+			if(ret = currNonLeaf.write(currPid, pf))
 				return ret;
 
 			if(ret = newInsideNode.write(endPid, pf))
@@ -207,9 +203,8 @@ RC BTreeIndex::insert_help(int key, const RecordId& rid, int currHeight, PageId 
 		}
 		return 0;
 	}
-		return 0; 
-
-	
+		
+	return 0; 
 }
 
 /**
@@ -245,6 +240,8 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
  */
 RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 {
+	RC ret;
+
 	int curEid = cursor.eid; 
 	PageId curPid = cursor.pid;
 	if(curPid <= 0)
@@ -305,6 +302,68 @@ void BTreeIndex::printContents(const char* file)
 			fprintf(logFile, "entry %i:\n", i);
 			fprintf(logFile, "\tkey = %i\n", key);
 			fprintf(logFile, "\trid = (%i, %i)\n\n", rid.pid, rid.sid);
+		}
+		return;
+	}
+
+	else {
+		BTLeafNode leaf;
+		leaf.read(1, pf);
+		buffer = leaf.getContents();
+		keyCount = leaf.getKeyCount();
+		pid = leaf.getNextNodePtr();
+
+		fprintf(logFile, "Leaf Node (treeHeight = 2)\n");
+		fprintf(logFile, "keyCount = %i\n", keyCount);
+		fprintf(logFile, "next pid = %i\n\n", pid);
+
+		for (int i = 1; i <= keyCount; i++) {
+			memcpy(&key, buffer + (i * 12), sizeof(int));
+			memcpy(&rid, buffer + (i * 12) + sizeof(int), sizeof(RecordId));
+			fprintf(logFile, "entry %i:\n", i);
+			fprintf(logFile, "\tkey = %i\n", key);
+			fprintf(logFile, "\trid = (%i, %i)\n\n", rid.pid, rid.sid);
+		}
+
+		fprintf(logFile, "%s\n\n", separator.c_str());
+
+		leaf.read(2, pf);
+		buffer = leaf.getContents();
+		keyCount = leaf.getKeyCount();
+		pid = leaf.getNextNodePtr();
+
+		fprintf(logFile, "Leaf Node (treeHeight = 2)\n");
+		fprintf(logFile, "keyCount = %i\n", keyCount);
+		fprintf(logFile, "next pid = %i\n\n", pid);
+
+		for (int i = 1; i <= keyCount; i++) {
+			memcpy(&key, buffer + (i * 12), sizeof(int));
+			memcpy(&rid, buffer + (i * 12) + sizeof(int), sizeof(RecordId));
+			fprintf(logFile, "entry %i:\n", i);
+			fprintf(logFile, "\tkey = %i\n", key);
+			fprintf(logFile, "\trid = (%i, %i)\n\n", rid.pid, rid.sid);
+		}
+
+		fprintf(logFile, "%s\n\n", separator.c_str());
+
+		BTNonLeafNode nonLeaf;
+		nonLeaf.read(3, pf);
+		buffer = nonLeaf.getContents();
+		keyCount = nonLeaf.getKeyCount();
+
+		fprintf(logFile, "Root Node (treeHeight = 1)\n");
+		fprintf(logFile, "keyCount = %i\n", keyCount);
+
+		for (int i = 1; i <= keyCount; i++) {
+			memcpy(&key, buffer + (i * 8), sizeof(int));
+			fprintf(logFile, "entry %i:\n", i);
+			if (i == 1) {
+				memcpy(&pid, buffer + sizeof(int), sizeof(PageId));
+				fprintf(logFile, "\tpid1 = %i\n", pid);
+			}
+			memcpy(&pid, buffer + (i * 8) + sizeof(int), sizeof(PageId));
+			fprintf(logFile, "\tkey = %i\n", key);
+			fprintf(logFile, "\tpid = %i\n", pid);
 		}
 
 	}
