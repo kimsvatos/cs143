@@ -33,8 +33,11 @@ class BTreeIndex {
  public:
 
   static const PageId METADATA_PID = 0;   // PageId where rootPid, treeHeight stored
-  static const PageId ROOT_PID     = 1;   // PageId containing root
 
+ /**
+  * BTreeIndex constructor.
+  * Initializes 'rootPid' and 'treeHeight' to reflect an empty tree.
+  */
   BTreeIndex();
 
   /**
@@ -90,15 +93,10 @@ class BTreeIndex {
    */
   RC readForward(IndexCursor& cursor, int& key, RecordId& rid);
 
-  void printContents(const char* file);
+  void printContents(const char* file); // todo delete or upgrade
   
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
-
-  RC recInsert(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid);
-  char pfMode;
-
-
 
   PageId   rootPid;    /// the PageId of the root node
   int      treeHeight; /// the height of the tree
@@ -106,6 +104,14 @@ class BTreeIndex {
   /// this class is destructed. Make sure to store the values of the two 
   /// variables in disk, so that they can be reconstructed when the index
   /// is opened again later.
+
+  /**
+   * Function to recursively insert a (key, rid) pair into the tree. Accounts for leaf,
+   * non-leaf overflow and the splitting of nodes that results from said overflow.
+   */
+  RC recInsert(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& holderPid);
+  
+  char pfMode;  /// mode that the file was opened in
 };
 
 #endif /* BTREEINDEX_H */

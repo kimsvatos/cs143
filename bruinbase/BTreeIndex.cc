@@ -12,12 +12,12 @@
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
-//#include <stdlib.h>
 
 using namespace std;
 
 /*
  * BTreeIndex constructor
+ * Initializes 'rootPid' and 'treeHeight' to reflect an empty tree.
  */
 BTreeIndex::BTreeIndex()
 {
@@ -43,14 +43,14 @@ RC BTreeIndex::open(const string& indexname, char mode)
 
 	/* Store file mode in member variable. If the file was opened in 'r' mode and
 	   we call 'close', we should avoid writing any changes to the pf, as this
-	   will result in an error  */
+	   will result in an error.  */
 	pfMode = mode;
 
 	/* If index has been modified, retrieve rootPid and treeHeight from the index
-	 * file being opened  */
-	if(pf.endPid() != BTreeIndex::METADATA_PID) {
+	 * file being opened  */  // TODO: Why do we need this test?
+	if (pf.endPid() != BTreeIndex::METADATA_PID) {
 
-		if(ret = pf.read(BTreeIndex::METADATA_PID, buffer))
+		if (ret = pf.read(BTreeIndex::METADATA_PID, buffer))
 			return ret;
 
 		memcpy(&rootPid, buffer, sizeof(PageId));
@@ -102,12 +102,16 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
 
 	/* For a new tree, we start with an empty leaf node and insert the pair  */
 	else {
+
+		/* Should be able to successfully insert into empty leaf  */
 		BTLeafNode newNode;
 		if (ret = newNode.insert(key, rid))
 			return ret;
 
-		rootPid = (pf.endPid() == BTreeIndex::METADATA_PID ? BTreeIndex::ROOT_PID : pf.endPid());
+		/* Assign new value to rootPid  */
+		rootPid = (pf.endPid() == BTreeIndex::METADATA_PID ? 1 : pf.endPid());
 		
+		/* Write leaf contents to the page it belongs to  */
 		if ((ret = newNode.write(rootPid, pf)) == 0)
 			treeHeight++; 
 	}
@@ -115,6 +119,10 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     return ret;
 }
 
+/**
+ * Function to recursively insert a (key, rid) pair into the tree. Accounts for leaf,
+ * non-leaf overflow and the splitting of nodes that results from said overflow.
+ */
 RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId currPid, int& midKey, PageId& endPid)
 {
 	RC ret; 
@@ -136,7 +144,8 @@ RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId cu
 		if (ret = currLeaf.insertAndSplit(key, rid, emptyLeaf, midKey))
 			return ret;
 
-		/* Rearrange neighbor pointers so that current leaf comes before new sibling  */
+		/* Rearrange neighbor pointers so that current leaf comes before new sibling.
+		   The sibling (i.e., newest node) goes to the current end pid.  */
 		endPid = pf.endPid();
 		emptyLeaf.setNextNodePtr(currLeaf.getNextNodePtr());
 		currLeaf.setNextNodePtr(endPid);
@@ -147,13 +156,15 @@ RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId cu
 		if (ret = emptyLeaf.write(endPid, pf))
 			return ret;
 
-		/* Just split the root leaf node, need a root non-leaf node to be added to tree */
+		/* Current root (leaf) has been split, must create new root (non-leaf) */
 		if (treeHeight == 1) {
+
 			BTNonLeafNode root;
 			root.initializeRoot(currPid, midKey, endPid);
-			treeHeight++;
 			rootPid = pf.endPid();
+			treeHeight++;
 			root.write(rootPid, pf);
+
 		}
 	}
 
@@ -174,34 +185,41 @@ RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId cu
 		int recPid = -1;
 		recInsert(key, rid, currHeight + 1, childPid, recKey, recPid);
 
-		//if we get here there has been an error
-		if (!(recKey == -1 && recPid == -1)) {
+		/* If recKey or recPid (realistically both) were set, an insertAndSplit was
+		 * was performed on a node below this node. Must account for this in current
+		 * node.  
+		 */
+		if (recKey != -1 || recPid != -1) {
+
+			/* Easy case: Insert midKey and child pid from insertAndSplit into parent
+			 * non-leaf node.  */
 			if (currNonLeaf.insert(recKey, recPid) == 0)
 				return currNonLeaf.write(currPid, pf);
 
-			BTNonLeafNode newInsideNode;
-			currNonLeaf.insertAndSplit(recKey, recPid, newInsideNode, midKey);
-
-			int endPid = pf.endPid();
-
-			if(ret = currNonLeaf.write(currPid, pf))
+			/* Harder case: Parent non-leaf node is full, we need to insert & split.  */
+			BTNonLeafNode emptyNonLeaf;
+			if (ret = currNonLeaf.insertAndSplit(recKey, recPid, emptyNonLeaf, midKey))
 				return ret;
 
-			if(ret = newInsideNode.write(endPid, pf))
+			endPid = pf.endPid();
+
+			if (ret = currNonLeaf.write(currPid, pf))
 				return ret;
 
-			fprintf(stderr, "treeheight is....%i", treeHeight);
-			if(treeHeight == 1){
+			if (ret = emptyNonLeaf.write(endPid, pf))
+				return ret;
+
+			/* Current root (non-leaf) has been split, must create new root (non-leaf) */
+			if (treeHeight == 1) {
+
 				BTNonLeafNode root;
 				root.initializeRoot(currPid, midKey, endPid);
-				fprintf(stderr, "endpid is.....%i\ncurrpid is....%i\n", endPid, currPid);
-				treeHeight++;
 				rootPid = pf.endPid();
+				treeHeight++;
 				root.write(rootPid, pf);
+
 			}
-			
 		}
-		return 0;
 	}
 		
 	return 0; 
@@ -227,32 +245,41 @@ RC BTreeIndex::recInsert(int key, const RecordId& rid, int currHeight, PageId cu
  */
 RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
 {
-	int ret;
-	BTNonLeafNode middle;
-	BTLeafNode node;
-	int eid, currHeight;
-	PageId next = rootPid;
+	RC             ret;
+	BTNonLeafNode  currNonLeaf;
+	BTLeafNode     currLeaf;
+	int            eid;
 
-	for(currHeight = 1; currHeight != treeHeight; currHeight++){
+	/* Starting at the root node, traverse through tree using locateChildPtr until
+	 * we reach the deepest level, consisting of leaf nodes. At this point, we will
+	 * have narrowed down the search to the appropriate leaf node.
+	 */
+	PageId currPid = rootPid;
+	for (int currHeight = 1; currHeight != treeHeight; currHeight++) {
 
-		if(!(ret = middle.read(next, pf)))
+		if (ret = currNonLeaf.read(currPid, pf))
 			return ret;
 
-		if(!(ret = middle.locateChildPtr(searchKey, next)));
+		if (ret = currNonLeaf.locateChildPtr(searchKey, currPid))
 			return ret; 
-
 	}
 
-	if(!(ret = node.read(next, pf)))
+	/* Reached the appropriate leaf node that would contain the searchKey (if it
+	 * does exist). Read the leaf node's contents.
+	 */
+	if (ret = currLeaf.read(currPid, pf))
 		return ret;
 
-	if(!(node.locate(searchkey, eid)))
-		return ret;
-
+	/* Attempt to locate the key. Will return 0 if found, RC_NO_SUCH_RECORD if not.
+	 * Regardless of outcome, cursor's pid will be set to pid of leaf node.
+	 * Cursor's eid will either be correct entry containing key or entry after the
+	 * largest key smaller than searchKey.
+	 */
+	ret = currLeaf.locate(searchKey, eid);
 	cursor.eid = eid;
- 	cursor.pid = next;
+ 	cursor.pid = currPid;
  	
-    return 0;
+    return ret;		/* Either 0 or RC_NO_SUCH_RECORD  */
 }
 
 /*
@@ -267,35 +294,56 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 {
 	RC ret;
 
-	int curEid = cursor.eid; 
-	PageId curPid = cursor.pid;
-	if(curPid <= 0)
+	int nextEid;	/* What will 'eid' be set to when we move the cursor forward?  */
+	PageId nextPid;	/* What will 'pid' be set to when we move the cursor forward?  */
+
+	nextEid = cursor.eid;	
+	nextPid = cursor.pid;
+
+	/* Some boundary checks for an invalid cursor. pid cannot be 0 as this page is
+	 * reserved for metadata (i.e., rootPid and treeHeight). pid cannot exceed the
+	 * last readable page in pf. eid cannot be negative, and should not be zero as
+	 * this space is reserved for keyCount. First eid begins at eid=1.
+	 */
+	if((cursor.pid <= 0) || (cursor.pid >= pf.endPid()) || (cursor.eid <= 0))
 		return RC_INVALID_CURSOR;
 
-
-	BTLeafNode node; 
-	if(!(ret = node.read(curPid, pf)))
+	/* Read the contents at the location specified by the index cursor.  */
+	BTLeafNode currLeaf;
+	if (ret = currLeaf.read(cursor.pid, pf))
 		return ret;
-
-	if(!(ret = node.readEntry(curEid, key, rid)))
+	if (ret = currLeaf.readEntry(cursor.eid, key, rid))
 		return ret; 
 
-	if(curEid < node.getKeyCount() -1)
-		curEid++;
-	else{
-		curEid = 0;
-		curPid = node.getNextNodePtr();
+	/* Boundary checks are based on our structure / implementation in BTreeNode.cc
+     * The first eid of a page begins at 1. 0 is reserved for keyCount of the node
+     */
+	if (cursor.eid < currLeaf.getKeyCount())
+		nextEid++;	
+	else {
+		nextEid = 1;
+		nextPid = currLeaf.getNextNodePtr();
 	}
 
-	cursor.eid = curEid;
-	cursor.pid = curPid; 
+	/* Set index cursor to next entry  */
+	cursor.eid = nextEid;
+	cursor.pid = nextPid; 
 
     return 0;
 }
 
+
+
+
+
+
+
+
+
+// todo: delete or update
 void BTreeIndex::printContents(const char* file)
 {
-	string separator = "////////////////////////////////////////////////////////////";
+	/*string separator = "////////////////////////////////////////////////////////////";
 	const char* buffer;
 	PageId pid;
 	int key;
@@ -391,6 +439,6 @@ void BTreeIndex::printContents(const char* file)
 			fprintf(logFile, "\tpid = %i\n", pid);
 		}
 
-	}
+	}*/
 
 }

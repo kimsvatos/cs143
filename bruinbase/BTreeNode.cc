@@ -96,10 +96,8 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 	int totalEntries = (PageFile::PAGE_SIZE - sizeof(PageId) - entrySize) / entrySize;
 	
 	int keyCount = getKeyCount();
-	if (keyCount == totalEntries) { // Can't insert any more entries into node
-		fprintf(stderr, "failed at node full");
+	if (keyCount == totalEntries)  // Can't insert any more entries into node
 		return RC_NODE_FULL;
-}
 
 	/* Loop through all entries in the buffer, searching for the first entry with 
 	 * a key value that is greater than the key value of the entry to insert. If
@@ -170,7 +168,6 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 RC BTLeafNode::insertAndSplit(int key, const RecordId& rid, 
                               BTLeafNode& sibling, int& siblingKey)
 { 
-
 	/* Compute:
 	 *   - Size of a leaf node entry (consists of key and RecordId)
      *   - Total # of entries that can fit into a node
@@ -204,8 +201,6 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 
 	memcpy(&siblingKey, sibling.buffer + entrySize, sizeof(int));
 
-	fprintf(stderr, "first key (of second page) is....%i\n", firstSiblingKey);
-
 	return 0; 
 }
 
@@ -234,8 +229,6 @@ RC BTLeafNode::locate(int searchKey, int& eid)
 	for(i = 1; i <= keyCount; i++) {
 
 		memcpy(&currentKey, buffer + (i * entrySize), sizeof(int));
-
-		fprintf(stderr, "%i ", currentKey);
 
 		if (currentKey >= searchKey) {
 			matchFound = (currentKey == searchKey ? 1 : 0);
@@ -537,9 +530,6 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 		midKey = key; 
 
 	}
-
-
-	//fprintf(stderr, "first key (of first page) is....%i\n");	
 
 	return 0; 
 }
