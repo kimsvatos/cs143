@@ -14,6 +14,7 @@
 #include <fstream>
 #include "Bruinbase.h"
 #include "SqlEngine.h"
+#include "BTreeIndex.h"
 
 using namespace std;
 
@@ -132,44 +133,68 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
 RC SqlEngine::load(const string& table, const string& loadfile, bool index)
 {
-  ifstream loadFile(loadfile.c_str());
-  string line;
-  int key;
-  string value;
+  ifstream    loadFile(loadfile.c_str());	/* File for loading contents of table  */
+  RecordFile  tableFile;					/* File for storing contents of table  */
+  BTreeIndex  indexFile;					/* File for storing contents of index  */
 
-  RecordFile tableFile;
-  RecordId   tableRecord;
-  RC ret;
+  /* Variables for reading input data / creating table & index files  */
+  string    line;
+  int       key;
+  string    value;
+  RecordId  tableRecord;
+  RC        ret;
+
+  /* Open file where table contents will be stored  */
   if ((ret = tableFile.open(table + ".tbl", 'w')) < 0) {
     fprintf(stderr, "Error creating table '%s' during LOAD\n", table.c_str());
     return ret;
   }
 
+  /* If applicable, open file where index contents will be stored  */
+  if (index) {
+  	if (ret = indexFile.open(table + ".idx", 'w')) {
+  		fprintf(stderr, "Error opening index file for write\n");
+  		return ret;
+  	}
+  }
+
+  /* If load file successfully opened, parse all input and construct table / index  */
   if (loadFile.is_open()) {
+
     while (getline(loadFile, line)) {
+      
       if ((ret = parseLoadLine(line, key, value)) < 0) {
-	fprintf(stderr, "Error parsing line from load file '%s'", loadfile.c_str());
-	return ret;
+		fprintf(stderr, "Error parsing line from load file '%s'", loadfile.c_str());
+		return ret;
       }
       
       if ((ret = tableFile.append(key, value, tableRecord)) < 0) {
-	fprintf(stderr, "Error adding tuple with key '%i', value '%s' into table '%s'\n", key, value.c_str(), table.c_str());
-	return ret;
+		fprintf(stderr, "Error adding tuple with key '%i', value '%s' into table '%s'\n", key, value.c_str(), table.c_str());
+		return ret;
       }
+
+      if (index) {
+      	if (ret = indexFile.insert(key, tableRecord)) {
+      		fprintf(stderr, "Error adding (key, rid) to index for table '%s'\n", table.c_str());
+      		return ret;
+      	}
+      }
+
     }
+
+    loadFile.close();
+    tableFile.close();
   }
+
+  /* Load file did not successfully open for read  */
   else {
     fprintf(stderr, "Error opening load file '%s'", loadfile.c_str());
-    return -1;
+    return RC_FILE_OPEN_FAILED;
   }
 
   if (index) {
-    // TODO (later part): Create index on key column of table
-    ;
+  	indexFile.close();
   }
-
-  loadFile.close();
-  tableFile.close();
 
   return 0;
 }

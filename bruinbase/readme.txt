@@ -4,6 +4,9 @@ haackerk@ucla.edu, kimsvatos@ucla.edu
 
 Project 2 - Part C
 
+*** note for 2D ***
+--- talk about how we added commenting for final implementation of load funct.
+
 The deliverable for this part of the project is a single zip file "P2.zip" containing:
 
 	- This README file
