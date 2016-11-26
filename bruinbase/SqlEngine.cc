@@ -46,6 +46,11 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   int    count;
   int    diff;
 
+  /* New variables, added for our implementation of B+ tree  */
+  BTreeIndex   bti;
+  IndexCursor  cur;
+  
+
   // open the table file
   if ((rc = rf.open(table + ".tbl", 'r')) < 0) {
     fprintf(stderr, "Error: table %s does not exist\n", table.c_str());
