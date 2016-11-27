@@ -79,9 +79,19 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
   	currCond = cond[i];
 
-  	if ((currCond.attr == ATTR_KEY) && (currCond.comp != SelCond::NE)) {
-  		;
+  	/* The current condition is on the "key" attribute  */
+  	if (currCond.attr == ATTR_KEY) {
+  		
   	}
+  	
+  	/* The current condition is on the "value" attribute  */
+  	else if (currCond.attr == ATTR_VAL) {
+
+  	}
+
+    /* We shouldn't end up here, condition must be on key or value  */
+  	else
+  		continue;  
 
   }
 
