@@ -43,97 +43,119 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   RC     rc;
   int    key;     
   string value;
-  int    count;
+  int    count;	// TODO: remember to initialize to 0 at some point...
   int    diff;
 
   /* New variables, added for our implementation of B+ tree  */
   BTreeIndex   bti;
   IndexCursor  cur;
   
-
-  // open the table file
+  /* Open table file to retrieve query results  */
   if ((rc = rf.open(table + ".tbl", 'r')) < 0) {
     fprintf(stderr, "Error: table %s does not exist\n", table.c_str());
     return rc;
   }
 
-  // scan the table file from the beginning
-  rid.pid = rid.sid = 0;
-  count = 0;
-  while (rid < rf.endRid()) {
-    // read the tuple
-    if ((rc = rf.read(rid, key, value)) < 0) {
-      fprintf(stderr, "Error: while reading a tuple from table %s\n", table.c_str());
-      goto exit_select;
-    }
+  /* If we fail to open the index file (likely because there is no index for the table),
+   * we have to perform a normal select, scanning through each tuple in the table.  */
+  if (bti.open(table + ".idx", 'r'))
+  	goto no_index_select;
 
-    // check the conditions on the tuple
-    for (unsigned i = 0; i < cond.size(); i++) {
-      // compute the difference between the tuple value and the condition value
-      switch (cond[i].attr) {
-      case 1:
-	diff = key - atoi(cond[i].value);
-	break;
-      case 2:
-	diff = strcmp(value.c_str(), cond[i].value);
-	break;
-      }
-
-      // skip the tuple if any condition is not met
-      switch (cond[i].comp) {
-      case SelCond::EQ:
-	if (diff != 0) goto next_tuple;
-	break;
-      case SelCond::NE:
-	if (diff == 0) goto next_tuple;
-	break;
-      case SelCond::GT:
-	if (diff <= 0) goto next_tuple;
-	break;
-      case SelCond::LT:
-	if (diff >= 0) goto next_tuple;
-	break;
-      case SelCond::GE:
-	if (diff < 0) goto next_tuple;
-	break;
-      case SelCond::LE:
-	if (diff > 0) goto next_tuple;
-	break;
-      }
-    }
-
-    // the condition is met for the tuple. 
-    // increase matching tuple counter
-    count++;
-
-    // print the tuple 
-    switch (attr) {
-    case 1:  // SELECT key
-      fprintf(stdout, "%d\n", key);
-      break;
-    case 2:  // SELECT value
-      fprintf(stdout, "%s\n", value.c_str());
-      break;
-    case 3:  // SELECT *
-      fprintf(stdout, "%d '%s'\n", key, value.c_str());
-      break;
-    }
-
-    // move to the next tuple
-    next_tuple:
-    ++rid;
+  /* TODO: Begin index stuff here...  */
+  for (unsigned i = 0; i < cond.size(); i++) {
+  	//TODO: Implement code here
+  	fprintf(stdout, "Condition\n");
   }
 
-  // print matching tuple count if "select count(*)"
-  if (attr == 4) {
-    fprintf(stdout, "%d\n", count);
-  }
-  rc = 0;
+  /* This is the select code that was already written for us. It scans through all tuples
+   * and checks if each tuple satisifies the condition, printing it if it does. We perform
+   * this type of select if there is no index to access, or if using the index does not
+   * make sense.  */
+  no_index_select:
+	  // scan the table file from the beginning
+	  rid.pid = rid.sid = 0;
+	  count = 0;
+	  while (rid < rf.endRid()) {
+	    // read the tuple
+	    if ((rc = rf.read(rid, key, value)) < 0) {
+	      fprintf(stderr, "Error: while reading a tuple from table %s\n", table.c_str());
+	      goto exit_select;
+	    }
 
-  // close the table file and return
+	    // check the conditions on the tuple
+	    for (unsigned i = 0; i < cond.size(); i++) {
+	      
+	      // compute the difference between the tuple value and the condition value
+	      switch (cond[i].attr) {
+	      	case 1:
+				diff = key - atoi(cond[i].value);
+				break;
+	      	case 2:
+				diff = strcmp(value.c_str(), cond[i].value);
+				break;
+	      }
+
+	      // skip the tuple if any condition is not met
+	      switch (cond[i].comp) {
+	      	case SelCond::EQ:
+				if (diff != 0) goto next_tuple;
+				break;
+	      	case SelCond::NE:
+				if (diff == 0) goto next_tuple;
+				break;
+	      	case SelCond::GT:
+				if (diff <= 0) goto next_tuple;
+				break;
+	      	case SelCond::LT:
+				if (diff >= 0) goto next_tuple;
+				break;
+	      	case SelCond::GE:
+				if (diff < 0) goto next_tuple;
+				break;
+	      	case SelCond::LE:
+				if (diff > 0) goto next_tuple;
+				break;
+	      }
+	    }
+
+	    // the condition is met for the tuple. 
+	    // increase matching tuple counter
+	    count++;
+
+	    // print the tuple 
+	    switch (attr) {
+	    	case 1:  // SELECT key
+	      		fprintf(stdout, "%d\n", key);
+	      		break;
+	    	case 2:  // SELECT value
+	      		fprintf(stdout, "%s\n", value.c_str());
+	      		break;
+	    	case 3:  // SELECT *
+	      		fprintf(stdout, "%d '%s'\n", key, value.c_str());
+	      		break;
+	    }
+
+	    // move to the next tuple
+	    next_tuple:
+	    ++rid;
+	  }
+
+	  /* At the end of no_index_select, go to end_of_select code  */
+	  goto end_of_select;
+
+
+  /* This code should be executed after performing select.  */
+  end_of_select:
+	  // print matching tuple count if "select count(*)"
+	  if (attr == 4) {
+	    fprintf(stdout, "%d\n", count);
+	  }
+	  rc = 0;
+
+  /* Close the table file, the index file (if applicable), and return.  */
   exit_select:
-  rf.close();
-  return rc;
+	  rf.close();
+	  return rc;
 }
 
 RC SqlEngine::load(const string& table, const string& loadfile, bool index)
