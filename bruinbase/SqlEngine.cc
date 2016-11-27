@@ -81,7 +81,42 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
   	/* The current condition is on the "key" attribute  */
   	if (currCond.attr == ATTR_KEY) {
-  		
+
+  		/* Ignore NE. If a query only contains NE on a key, we should not use B+ tree
+  		 * as it does not make sense from a performance standpoint.  */
+  		if (currCond.comp == SelCond::NE) {
+  			continue;
+  		}
+
+  		/* Otherwise, comp is not NE, which suggests we should use index for select.  */
+  		useIndex = TRUE;
+
+  		switch (currCond.comp) {
+  			
+  			case SelCond::EQ:
+  				;
+  				break;
+
+  			case SelCond::LT:
+  				;
+  				break;
+
+  			case SelCond::GT:
+  				;
+  				break;
+
+  			case SelCond::LE:
+  				;
+  				break;
+
+  			case SelCond::GE:
+  				;
+  				break;
+
+  			default:
+  				break;
+  		}
+
   	}
   	
   	/* The current condition is on the "value" attribute  */
@@ -105,7 +140,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   /* This is the select code that was already written for us. It scans through all tuples
    * and checks if each tuple satisifies the condition, printing it if it does. We perform
    * this type of select if there is no index to access, or if using the index does not
-   * make sense.  */
+   * make sense from a performance standpoint.  */
   no_index_select:
 	  // scan the table file from the beginning
 	  rid.pid = rid.sid = 0;
