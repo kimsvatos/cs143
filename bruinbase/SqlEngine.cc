@@ -56,16 +56,34 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
     return rc;
   }
 
-  /* If we fail to open the index file (likely because there is no index for the table),
-   * we have to perform a normal select, scanning through each tuple in the table.  */
+  /* In the simplest case, we can't open the index file (likely doesn't exist) and
+   * thus we have to perform the select by scanning through each tuple.  */
   if (bti.open(table + ".idx", 'r'))
   	goto no_index_select;
 
+
+
   /* TODO: Begin index stuff here...  */
+  //////////////////////////////////////
+  //////////////////////////////////////
+
+  SelCond  currCond;
+  bool     useIndex  = FALSE;
+  bool     needValue = FALSE;
+
+  // TODO: Add more variables here...
+
   for (unsigned i = 0; i < cond.size(); i++) {
   	//TODO: Implement code here
   	fprintf(stdout, "Condition\n");
   }
+
+  ///////////////////////////////////////////
+  ///////////////////////////////////////////
+  /* END TODO: End of added index stuff... */
+
+
+
 
   /* This is the select code that was already written for us. It scans through all tuples
    * and checks if each tuple satisifies the condition, printing it if it does. We perform
