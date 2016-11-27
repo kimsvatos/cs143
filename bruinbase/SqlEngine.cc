@@ -43,12 +43,16 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   RC     rc;
   int    key;     
   string value;
-  int    count;	// TODO: remember to initialize to 0 at some point...
+  int    count;	// TODO: don't forgot to initialize where appropriate...
   int    diff;
 
   /* New variables, added for our implementation of B+ tree  */
   BTreeIndex   bti;
   IndexCursor  cur;
+  const int    ATTR_KEY = 1;
+  const int    ATTR_VAL = 2;
+  const int    ATTR_ALL = 3;
+  const int    ATTR_CNT = 4;
   
   /* Open table file to retrieve query results  */
   if ((rc = rf.open(table + ".tbl", 'r')) < 0) {
@@ -56,8 +60,8 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
     return rc;
   }
 
-  /* In the simplest case, we can't open the index file (likely doesn't exist) and
-   * thus we have to perform the select by scanning through each tuple.  */
+  /* If we cannot open the index file (likely doesn't exist), we
+   * have to perform the select by scanning through each tuple.  */
   if (bti.open(table + ".idx", 'r'))
   	goto no_index_select;
 
@@ -71,11 +75,14 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   bool     useIndex  = FALSE;
   bool     needValue = FALSE;
 
-  // TODO: Add more variables here...
-
   for (unsigned i = 0; i < cond.size(); i++) {
-  	//TODO: Implement code here
-  	fprintf(stdout, "Condition\n");
+
+  	currCond = cond[i];
+
+  	if ((currCond.attr == ATTR_KEY) && (currCond.comp != SelCond::NE)) {
+  		;
+  	}
+
   }
 
   ///////////////////////////////////////////
