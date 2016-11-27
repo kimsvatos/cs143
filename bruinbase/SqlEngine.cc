@@ -53,6 +53,17 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   const int    ATTR_VAL = 2;
   const int    ATTR_ALL = 3;
   const int    ATTR_CNT = 4;
+  SelCond      currCond;
+  int          currCompValue;
+  bool         useIndex  = false;
+  bool         needValue = false;
+  int          minKey = -1;
+  bool		   minGT = false;  // true means key is > min (false means >= min)
+  int          maxKey = -1;
+  bool         maxLT = false;  // true means key is < max (false means <= max)
+
+
+
   
   /* Open table file to retrieve query results  */
   if ((rc = rf.open(table + ".tbl", 'r')) < 0) {
@@ -71,10 +82,6 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   //////////////////////////////////////
   //////////////////////////////////////
 
-  SelCond  currCond;
-  bool     useIndex  = FALSE;
-  bool     needValue = FALSE;
-
   for (unsigned i = 0; i < cond.size(); i++) {
 
   	currCond = cond[i];
@@ -88,29 +95,44 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   			continue;
   		}
 
-  		/* Otherwise, comp is not NE, which suggests we should use index for select.  */
-  		useIndex = TRUE;
+  		/* Otherwise, comp is not NE, which suggests we should use index for select.
+  		 * Additionally, retrieve the key comparison value as an int.  */
+  		useIndex = true;
+  		currCompValue = atoi(currCond.value);
+
 
   		switch (currCond.comp) {
   			
   			case SelCond::EQ:
-  				;
+  				;		// TODO Do not blindly follow, consider casee of multiple EQ
   				break;
 
   			case SelCond::LT:
-  				;
+  				if ((maxKey == -1) || (currCompValue <= maxKey)) {
+  					maxKey  = currCompValue;
+  					maxLT   = true;
+  				}
   				break;
 
   			case SelCond::GT:
-  				;
+  				if ((minKey == -1) || (currCompValue >= minKey)) {
+  					minKey = currCompValue;
+  					minGT  = true;
+  				}
   				break;
 
   			case SelCond::LE:
-  				;
+  				if ((maxKey == -1) || (currCompValue < maxKey)) {
+  					maxKey  = currCompValue;
+  					maxLT   = false;
+  				}
   				break;
 
   			case SelCond::GE:
-  				;
+  				if ((minKey == -1) || (currCompValue > minKey)) {
+  					minKey  = currCompValue;
+  					minGT   = false;
+  				}
   				break;
 
   			default:
@@ -129,6 +151,8 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   		continue;  
 
   }
+
+  goto end_of_select;
 
   ///////////////////////////////////////////
   ///////////////////////////////////////////
