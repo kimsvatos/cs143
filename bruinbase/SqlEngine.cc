@@ -81,7 +81,6 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   string 	   valEQValue = "";					/* What must str value be equal to?  */
   bool		   valEQValueSet = false;		     /* Has str value been set in cond?  */
 
-
   /* Open table file to retrieve query results  */
   if ((rc = rf.open(table + ".tbl", 'r')) < 0) {
     fprintf(stderr, "Error: table %s does not exist\n", table.c_str());
