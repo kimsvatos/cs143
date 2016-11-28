@@ -233,7 +233,10 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   else
   	indexOpen = true;
 
-  if (!useIndex)	// TODO: Not sure about adding "&& attr != ATTR_CNT"
+  /* If input suggests we don't use the index, we won't unless we are doing a
+   * count(*) which can be optimized if there are no conditions on the value.
+   * See (or search) "possible optimization" below.  */
+  if (!useIndex && attr != ATTR_CNT)
   	goto no_index_select;
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -260,8 +263,9 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   bti.locate(searchKey, cur);
   while (bti.readForward(cur, key, rid) == 0) {
 
-  	// TODO: Not sure about this...
-  	if (!needValue && (attr == ATTR_CNT)) {
+  	/* Possible optimization: if there are no conditions on values, and we are only returning the count, we can
+  	 * run through this code without having to read tuples from the RecordFile.  */
+  	if (!needValue && attr == ATTR_CNT) {
 
   		if (keyEQValueSet && keyEQValue != key)
   			goto end_of_select;  		
