@@ -34,7 +34,7 @@ example, if the WHERE conditions are "key=3 and key>3", there is no such tuple t
 satisfy this case and thus we can quit immediately. Similarly, for "key=3 and key=5", there
 is no way a tuple could have two values for key and thus we return empty set.
 
-// TODO: Describe testing (we believe...)
+// TODO: Describe testing (we believe....)
 
 
 The teamwork for this part had an approximate 90-10, 10-90 breakdown:
