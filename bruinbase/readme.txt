@@ -34,7 +34,14 @@ example, if the WHERE conditions are "key=3 and key>3", there is no such tuple t
 satisfy this case and thus we can quit immediately. Similarly, for "key=3 and key=5", there
 is no way a tuple could have two values for key and thus we return empty set.
 
-// TODO: Describe testing (we believe....)
+For testing, we used test.sh provided by the instructor, and built off of that script
+to include our own test cases. For each individual test case, we also ran an identical
+query for a table not using index, to track the performance improvement. All of our
+test cases saw significant improvement when using index, and matched the number of page
+reads (off-by-one) as noted in the sample output file.
+
+Through our testing, we believe each query returns the correct answer while also 
+greatly improving the performance.  
 
 
 The teamwork for this part had an approximate 90-10, 10-90 breakdown:
